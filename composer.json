@@ -1,0 +1,22 @@
+{
+  "name": "misantron/utility-array-helper",
+  "version": "0.1.0",
+  "description": "Array utility helper for PHP developers",
+  "license": "MIT",
+  "keywords": [
+    "php",
+    "array",
+    "helper"
+  ],
+  "autoload": {
+    "psr-4": {
+      "Utility\\": ["src/"]
+    }
+  },
+  "require": {
+    "php": ">=5.3.3"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.4.*"
+  }
+}

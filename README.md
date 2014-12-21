@@ -1,4 +1,4 @@
-php-utils
+Array helper
 =========
 
-Helpers for development
+Array helper for PHP developers
