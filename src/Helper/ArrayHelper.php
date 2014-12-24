@@ -105,9 +105,10 @@ class ArrayHelper
      *
      * @param array $arr
      * @param string $type
+     * @param bool $preserveKeys
      * @return array
      */
-    public static function filterValues($arr, $type = self::TYPE_INTEGER)
+    public static function filterValues($arr, $type = self::TYPE_INTEGER, $preserveKeys = false)
     {
         switch($type){
             case self::TYPE_INTEGER:
@@ -119,7 +120,13 @@ class ArrayHelper
             default:
                 $callback = null;
         }
-        return $callback ? array_filter($arr, $callback) : array_filter($arr);
+        if($callback){
+            $filtered = array_filter($arr, $callback);
+            $result = $preserveKeys ? $filtered : array_values($filtered);
+        } else {
+            $result = array_filter($arr);
+        }
+        return $result;
     }
 
     /**

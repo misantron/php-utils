@@ -120,7 +120,27 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterValues()
     {
-        // @todo: implement
+        $array = array(1, 3, 'val1', 'val2', 7, 14, 'val3', null, false);
+
+        $result = ArrayHelper::filterValues($array, 'abc');
+        $expected = array(1, 3, 'val1', 'val2', 7, 14, 'val3');
+        $this->assertEquals($expected, $result);
+
+        $result = ArrayHelper::filterValues($array, ArrayHelper::TYPE_INTEGER, true);
+        $expected = array(0 => 1, 1 => 3, 4 => 7, 5 => 14);
+        $this->assertEquals($expected, $result);
+
+        $result = ArrayHelper::filterValues($array, ArrayHelper::TYPE_INTEGER, false);
+        $expected = array(1, 3, 7, 14);
+        $this->assertEquals($expected, $result);
+
+        $result = ArrayHelper::filterValues($array, ArrayHelper::TYPE_STRING, true);
+        $expected = array(2 => 'val1', 3 => 'val2', 6 => 'val3');
+        $this->assertEquals($expected, $result);
+
+        $result = ArrayHelper::filterValues($array, ArrayHelper::TYPE_STRING, false);
+        $expected = array('val1', 'val2', 'val3',);
+        $this->assertEquals($expected, $result);
     }
 
     public function testSearchKey()
