@@ -2,8 +2,6 @@
 
 namespace Utility\Helper;
 
-use Utility\Exception\StaticClassException;
-
 /**
  * Class ArrayHelper
  * @package Utility\Helper
@@ -14,14 +12,6 @@ class ArrayHelper
         TYPE_INTEGER = 'integer',
         TYPE_STRING = 'string'
     ;
-
-    /**
-     * @throws StaticClassException
-     */
-    final function __construct()
-    {
-        throw new StaticClassException('Can not use class in non static context.');
-    }
 
     /**
      * Get selected value from array
@@ -201,18 +191,29 @@ class ArrayHelper
     /**
      * Merge two arrays recursive
      *
-     * @param array $array1
-     * @param array $array2
+     * @param array $arr1
+     * @param array $arr2
      * @return array
      */
-    public static function mergeRecursive($array1, $array2)
+    public static function mergeRecursive($arr1, $arr2)
     {
-        $res = $array1 + $array2;
-        foreach (array_intersect_key($array1, $array2) as $key => $val) {
-            if (is_array($val) && is_array($array2[$key])) {
-                $res[$key] = self::mergeRecursive($val, $array2[$key]);
+        $res = $arr1 + $arr2;
+        foreach (array_intersect_key($arr1, $arr2) as $key => $val) {
+            if (is_array($val) && is_array($arr2[$key])) {
+                $res[$key] = self::mergeRecursive($val, $arr2[$key]);
             }
         }
         return $res;
+    }
+
+    /**
+     * @param array $arr
+     * @return array
+     */
+    public static function flatten($arr)
+    {
+        $result = array();
+        array_walk_recursive($arr, function($a) use (& $result) { $result[] = $a; });
+        return $result;
     }
 }

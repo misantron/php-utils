@@ -3,21 +3,9 @@
 namespace Utility\Test\Helper;
 
 use Utility\Helper\ArrayHelper;
-use Utility\Exception\StaticClassException;
 
 class ArrayHelperTest extends \PHPUnit_Framework_TestCase
 {
-    public function testConstructorCall()
-    {
-//        try {
-//            $arrayHelper = new ArrayHelper();
-//            $this->setExpectedException('\Utility\Exception\StaticClassException');
-//        } catch(StaticClassException $e){
-//            $this->assertInstanceOf('\Utility\Exception\StaticClassException', $e);
-//            $this->assertEquals('Can not use class in non static context.', $e->getMessage());
-//        }
-    }
-
     public function testGet()
     {
         try {
@@ -247,6 +235,11 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
     }
 
     public function testMergeRecursive()
+    {
+        // @todo: implement
+    }
+
+    public function testFlatten()
     {
         // @todo: implement
     }
