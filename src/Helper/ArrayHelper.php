@@ -43,13 +43,11 @@ class ArrayHelper
      * @param array $arr
      * @param integer|string $columnKey
      * @param integer|string|null $indexKey
+     * @param bool $preserveKeys
      * @return array
      */
-    public static function extractColumn($arr, $columnKey, $indexKey = null)
+    public static function extractColumn($arr, $columnKey, $indexKey = null, $preserveKeys = false)
     {
-        if(function_exists('array_column')){
-            return array_column($arr, $columnKey, $indexKey);
-        }
         $result = array();
         if(!empty($arr)){
             foreach ($arr as $key => $val) {
@@ -59,7 +57,7 @@ class ArrayHelper
                 $result[$indexKey ? $val[$indexKey] : $key] = $val[$columnKey];
             }
         }
-        return $result;
+        return $preserveKeys ? $result : array_values($result);
     }
 
     /**

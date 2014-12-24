@@ -38,11 +38,17 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
         $result = ArrayHelper::extractColumn($emptyArray, 'key');
         $this->assertEquals(array(), $result);
 
-        $result = ArrayHelper::extractColumn($array, 'key1');
+        $result = ArrayHelper::extractColumn($array, 'key1', null, true);
         $this->assertEquals(array(10 => 1, 20 => 3), $result);
 
-        $result = ArrayHelper::extractColumn($array, 'key1', 'key2');
+        $result = ArrayHelper::extractColumn($array, 'key1', null, false);
+        $this->assertEquals(array(0 => 1, 1 => 3), $result);
+
+        $result = ArrayHelper::extractColumn($array, 'key1', 'key2', true);
         $this->assertEquals(array(2 => 1, 4 => 3), $result);
+
+        $result = ArrayHelper::extractColumn($array, 'key1', 'key2', false);
+        $this->assertEquals(array(0 => 1, 1 => 3), $result);
     }
 
     public function testWrapKeys()
