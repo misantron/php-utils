@@ -8,47 +8,54 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
 {
     public function testGet()
     {
+        $array = array();
+
         try {
-            ArrayHelper::get(array(), 'key');
+            ArrayHelper::get($array, 'key');
             $this->setExpectedException('\InvalidArgumentException');
         } catch(\InvalidArgumentException $e){
             $this->assertInstanceOf('\InvalidArgumentException', $e);
             $this->assertEquals('Element with key "key" not found.', $e->getMessage());
         }
 
-        $result = ArrayHelper::get(array(), 'key', 'default');
+        $result = ArrayHelper::get($array, 'key', 'default');
         $this->assertEquals('default', $result);
 
-        $result = ArrayHelper::get(array('key1' => 1, 'key2' => 2), 'key1', 'default');
+        $array = array('key1' => 1, 'key2' => 2);
+        $result = ArrayHelper::get($array, 'key1', 'default');
         $this->assertEquals(1, $result);
     }
 
     public function testExtractColumn()
     {
+        $array = false;
+        $result = ArrayHelper::extractColumn($array, 'key1');
+        $this->isNull($result);
+
+        $array = '';
+        $result = ArrayHelper::extractColumn($array, 'key1');
+        $this->isNull($result);
+
+        $array = array();
+        $result = ArrayHelper::extractColumn($array, 'key1');
+        $this->isNull($result);
+
         $array = array(
             10 => array('key1' => 1, 'key2' => 2),
             20 => array('key1' => 3, 'key2' => 4),
         );
 
         $result = ArrayHelper::extractColumn($array, 'key3');
-        $this->assertEquals(array(), $result);
+        $expected = array();
+        $this->assertEquals($expected, $result);
 
-        $emptyArray = array();
+        $result = ArrayHelper::extractColumn($array, 'key1', true);
+        $expected = array(10 => 1, 20 => 3);
+        $this->assertEquals($expected, $result);
 
-        $result = ArrayHelper::extractColumn($emptyArray, 'key');
-        $this->assertEquals(array(), $result);
-
-        $result = ArrayHelper::extractColumn($array, 'key1', null, true);
-        $this->assertEquals(array(10 => 1, 20 => 3), $result);
-
-        $result = ArrayHelper::extractColumn($array, 'key1', null, false);
-        $this->assertEquals(array(0 => 1, 1 => 3), $result);
-
-        $result = ArrayHelper::extractColumn($array, 'key1', 'key2', true);
-        $this->assertEquals(array(2 => 1, 4 => 3), $result);
-
-        $result = ArrayHelper::extractColumn($array, 'key1', 'key2', false);
-        $this->assertEquals(array(0 => 1, 1 => 3), $result);
+        $result = ArrayHelper::extractColumn($array, 'key1', false);
+        $expected = array(0 => 1, 1 => 3);
+        $this->assertEquals($expected, $result);
     }
 
     public function testWrapKeys()
@@ -262,11 +269,110 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
 
     public function testMergeRecursive()
     {
-        // @todo: implement
+        $array1 = array(
+            'key1' => 'value1',
+            'key2' => array(
+                'key21' => array(
+                    'value21',
+                    'value22',
+                ),
+                'value221'
+            )
+        );
+        $array2 = array(
+            'key3' => 'value3',
+            'key2' => array(
+                'value222',
+                'value223',
+                'key21' => array(
+                    'value23'
+                )
+            )
+        );
+        $result = ArrayHelper::mergeRecursive($array1, $array2);
+        $expected = array(
+            'key1' => 'value1',
+            'key2' => array(
+                'key21' => array(
+                    'value21',
+                    'value22',
+                    'value23',
+                ),
+                'value221',
+                'value222',
+                'value223',
+            ),
+            'key3' => 'value3',
+        );
+        $this->assertEquals($expected, $result);
     }
 
     public function testFlatten()
     {
-        // @todo: implement
+        $array = array(
+            'key1' => 'value1',
+            'key2' => array(
+                'value2',
+                'value3'
+            )
+        );
+        $expected = array(
+            'value1',
+            'value2',
+            'value3'
+        );
+        $result = ArrayHelper::flatten($array);
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testMap()
+    {
+        $array = array(
+            array('key1' => 'value11', 'key2' => 'value12'),
+            array('key1' => 'value21', 'key2' => 'value22'),
+            array('key1' => 'value31', 'key2' => 'value32'),
+        );
+
+        $result = ArrayHelper::map($array, 'key1', 'key3');
+        $expected = array();
+        $this->assertEquals($expected, $result);
+
+        $result = ArrayHelper::map($array, 'key3', 'key2');
+        $expected = array();
+        $this->assertEquals($expected, $result);
+
+        $result = ArrayHelper::map($array, 'key1', 'key2');
+        $expected = array(
+            'value11' => 'value12',
+            'value21' => 'value22',
+            'value31' => 'value32'
+        );
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testMultisort()
+    {
+        $array = array(1, 2, 3, 4);
+        $keys = array('key1', 'key2');
+        $direction = array(SORT_ASC);
+
+        try {
+            ArrayHelper::multisort($array, $keys, $direction);
+            $this->setExpectedException('\InvalidArgumentException');
+        } catch(\InvalidArgumentException $e){
+            $this->assertInstanceOf('\InvalidArgumentException', $e);
+            $this->assertEquals('The length of $direction and $keys params must be equal.', $e->getMessage());
+        }
+
+        $direction = array(SORT_ASC, SORT_DESC);
+        $sortFlag = array(SORT_REGULAR);
+
+        try {
+            ArrayHelper::multisort($array, $keys, $direction, $sortFlag);
+            $this->setExpectedException('\InvalidArgumentException');
+        } catch(\InvalidArgumentException $e){
+            $this->assertInstanceOf('\InvalidArgumentException', $e);
+            $this->assertEquals('The length of $sortFlag and $keys params must be equal.', $e->getMessage());
+        }
     }
 }

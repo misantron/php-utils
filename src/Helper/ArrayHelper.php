@@ -14,16 +14,16 @@ class ArrayHelper
     ;
 
     /**
-     * Get selected value from array
+     * Get selected value from array by the key
      *
      * @param array $arr
-     * @param integer|string $key
-     * @param integer|string|null $default
+     * @param string $key
+     * @param string|null $default
      *
      * @throws \InvalidArgumentException
      * @return mixed
      */
-    public static function get($arr, $key, $default = null)
+    public static function get(&$arr, $key, $default = null)
     {
         $value = null;
         if(is_array($arr) && isset($arr[$key])){
@@ -41,21 +41,21 @@ class ArrayHelper
      * Extract selected column from assoc array
      *
      * @param array $arr
-     * @param integer|string $columnKey
-     * @param integer|string|null $indexKey
+     * @param string $columnKey
      * @param bool $preserveKeys
      * @return array
      */
-    public static function extractColumn($arr, $columnKey, $indexKey = null, $preserveKeys = false)
+    public static function extractColumn(&$arr, $columnKey, $preserveKeys = false)
     {
+        if(!is_array($arr) || empty($arr)){
+            return null;
+        }
         $result = array();
-        if(!empty($arr)){
-            foreach ($arr as $key => $val) {
-                if(!isset($val[$columnKey])){
-                    break;
-                }
-                $result[$indexKey ? $val[$indexKey] : $key] = $val[$columnKey];
+        foreach ($arr as $key => $val) {
+            if(!isset($val[$columnKey])){
+                break;
             }
+            $result[$key] = $val[$columnKey];
         }
         return $preserveKeys ? $result : array_values($result);
     }
@@ -64,11 +64,11 @@ class ArrayHelper
      * Add prefix and postfix to array keys
      *
      * @param array $arr
-     * @param string $prefix
-     * @param string $postfix
+     * @param string|null $prefix
+     * @param string|null $postfix
      * @return array
      */
-    public static function wrapKeys($arr, $prefix = '', $postfix = '')
+    public static function wrapKeys(&$arr, $prefix = null, $postfix = null)
     {
         $result = array();
         $prefix = (string)$prefix;
@@ -83,11 +83,11 @@ class ArrayHelper
      * Add prefix and postfix to array values
      *
      * @param array $arr
-     * @param integer|string $prefix
-     * @param integer|string $postfix
+     * @param string|null $prefix
+     * @param string|null $postfix
      * @return array
      */
-    public static function wrapValues($arr, $prefix = '', $postfix = '')
+    public static function wrapValues(&$arr, $prefix = null, $postfix = null)
     {
         $result = array();
         $prefix = (string)$prefix;
@@ -106,7 +106,7 @@ class ArrayHelper
      * @param bool $preserveKeys
      * @return array
      */
-    public static function filterValues($arr, $type = self::TYPE_INTEGER, $preserveKeys = false)
+    public static function filterValues(&$arr, $type = self::TYPE_INTEGER, $preserveKeys = false)
     {
         switch($type){
             case self::TYPE_INTEGER:
@@ -131,10 +131,10 @@ class ArrayHelper
      * Search selected key in array and return the offset
      *
      * @param array $arr
-     * @param integer|string $key
+     * @param string $key
      * @return int|bool
      */
-    public static function searchKey($arr, $key)
+    public static function searchKey(&$arr, $key)
     {
         $keys = array_keys($arr);
         return array_search($key, $keys, true);
@@ -144,12 +144,12 @@ class ArrayHelper
      * Insert element before selected key
      *
      * @param array $arr
-     * @param integer|string $needleKey
-     * @param array $element
-     * @param integer|string $withKey
+     * @param string $needleKey
+     * @param array|string $element
+     * @param string|null $withKey
      * @return array
      */
-    public static function insertBefore($arr, $needleKey, $element, $withKey = null)
+    public static function insertBefore(&$arr, $needleKey, $element, $withKey = null)
     {
         if(!is_array($element)){
             $element = array(($withKey ? $withKey : 0) => $element);
@@ -168,15 +168,15 @@ class ArrayHelper
     }
 
     /**
-     * Insert element after selected key
+     * Insert element after selected key.
      *
      * @param array $arr
-     * @param integer|string $needleKey
-     * @param array $element
-     * @param integer|string $withKey
+     * @param string $needleKey
+     * @param array|string $element
+     * @param string|null $withKey
      * @return array
      */
-    public static function insertAfter($arr, $needleKey, $element, $withKey = null)
+    public static function insertAfter(&$arr, $needleKey, $element, $withKey = null)
     {
         if(!is_array($element)){
             $element = array(($withKey ? $withKey : 0) => $element);
@@ -194,7 +194,8 @@ class ArrayHelper
     }
 
     /**
-     * Merge two arrays recursive
+     * Merge several arrays recursive.
+     * Basically use for two arrays.
      *
      * @param array $arr1
      * @param array $arr2
@@ -202,23 +203,94 @@ class ArrayHelper
      */
     public static function mergeRecursive($arr1, $arr2)
     {
-        $res = $arr1 + $arr2;
-        foreach (array_intersect_key($arr1, $arr2) as $key => $val) {
-            if (is_array($val) && is_array($arr2[$key])) {
-                $res[$key] = self::mergeRecursive($val, $arr2[$key]);
+        $args = func_get_args();
+        $result = array_shift($args);
+        while (!empty($args)) {
+            $next = array_shift($args);
+            foreach ($next as $k => $v) {
+                if (is_integer($k)) {
+                    if (isset($result[$k])) {
+                        $result[] = $v;
+                    } else {
+                        $result[$k] = $v;
+                    }
+                } elseif (is_array($v) && isset($result[$k]) && is_array($result[$k])) {
+                    $result[$k] = self::mergeRecursive($result[$k], $v);
+                } else {
+                    $result[$k] = $v;
+                }
             }
         }
-        return $res;
+        return $result;
     }
 
     /**
+     * Flatten a multi-dimensional array into a single level.
+     *
      * @param array $arr
      * @return array
      */
-    public static function flatten($arr)
+    public static function flatten(&$arr)
     {
         $result = array();
-        array_walk_recursive($arr, function($a) use (& $result) { $result[] = $a; });
+        array_walk_recursive($arr, function($a) use (& $result) {
+            $result[] = $a;
+        });
         return $result;
+    }
+
+    /**
+     * Build a map from multi-dimensional array.
+     *
+     * @param array $arr
+     * @param string $key
+     * @param string $value
+     * @return array
+     */
+    public static function map(&$arr, $key, $value)
+    {
+        $result = array();
+        foreach ($arr as $val) {
+            if(!isset($val[$key]) || !isset($val[$value])){
+                break;
+            }
+            $result[$val[$key]] = $val[$value];
+        }
+        return $result;
+    }
+
+    /**
+     * Sorts an assoc array by one or several keys.
+     *
+     * @param array $array
+     * @param string|array $key
+     * @param int $direction
+     * @param int $sortFlag
+     */
+    public static function multisort(&$array, $key, $direction = SORT_ASC, $sortFlag = SORT_REGULAR)
+    {
+        $keys = is_array($key) ? $key : array($key);
+        if (empty($keys) || empty($array)) {
+            return;
+        }
+        $n = sizeof($keys);
+        if (is_scalar($direction)) {
+            $direction = array_fill(0, $n, $direction);
+        } elseif (sizeof($direction) !== $n) {
+            throw new \InvalidArgumentException('The length of $direction and $keys params must be equal.');
+        }
+        if (is_scalar($sortFlag)) {
+            $sortFlag = array_fill(0, $n, $sortFlag);
+        } elseif (sizeof($sortFlag) !== $n) {
+            throw new \InvalidArgumentException('The length of $sortFlag and $keys params must be equal.');
+        }
+        $args = array();
+        foreach ($keys as $i => $key) {
+            $args[] = $array[$key];
+            $args[] = $direction[$i];
+            $args[] = $sortFlag[$i];
+        }
+        $args[] = &$array;
+        call_user_func_array('array_multisort', $args);
     }
 }

@@ -1,7 +1,7 @@
 {
-  "name": "misantron/utility-array-helper",
+  "name": "misantron/array-utils",
   "version": "0.1.0",
-  "description": "Array utility helper for PHP developers",
+  "description": "Collection of PHP array helper methods.",
   "license": "MIT",
   "keywords": [
     "php",
