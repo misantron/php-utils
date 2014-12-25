@@ -350,9 +350,30 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testMultisort()
+    public function testMultisortException()
     {
+        $array = array();
+        $keys = array('key1', 'key2');
+
+        try {
+            ArrayHelper::multisort($array, $keys);
+            $this->setExpectedException('\InvalidArgumentException');
+        } catch(\InvalidArgumentException $e){
+            $this->assertInstanceOf('\InvalidArgumentException', $e);
+            $this->assertEquals('Params $arr or $key is invalid for sorting.', $e->getMessage());
+        }
+
         $array = array(1, 2, 3, 4);
+        $keys = array();
+
+        try {
+            ArrayHelper::multisort($array, $keys);
+            $this->setExpectedException('\InvalidArgumentException');
+        } catch(\InvalidArgumentException $e){
+            $this->assertInstanceOf('\InvalidArgumentException', $e);
+            $this->assertEquals('Params $arr or $key is invalid for sorting.', $e->getMessage());
+        }
+
         $keys = array('key1', 'key2');
         $direction = array(SORT_ASC);
 
@@ -374,5 +395,39 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
             $this->assertInstanceOf('\InvalidArgumentException', $e);
             $this->assertEquals('The length of $sortFlag and $keys params must be equal.', $e->getMessage());
         }
+    }
+
+    public function testMultisort()
+    {
+        $array = array(
+            array("firstname" => "Mary", "lastname" => "Johnson", "age" => 25),
+            array("firstname" => "Amanda", "lastname" => "Miller", "age" => 18),
+            array("firstname" => "James", "lastname" => "Brown", "age" => 31),
+            array("firstname" => "Patricia", "lastname" => "Williams", "age" => 7),
+        );
+
+        $keys = 'firstname';
+        ArrayHelper::multisort($array, $keys);
+
+        $expected = array(
+            array("firstname" => "Amanda", "lastname" => "Miller", "age" => 18),
+            array("firstname" => "James", "lastname" => "Brown", "age" => 31),
+            array("firstname" => "Mary", "lastname" => "Johnson", "age" => 25),
+            array("firstname" => "Patricia", "lastname" => "Williams", "age" => 7),
+        );
+        $this->assertEquals($expected, $array);
+
+        $keys = array('firstname', 'age');
+        $direction = array(SORT_DESC, SORT_ASC);
+        $sortFlag = array(SORT_REGULAR, SORT_REGULAR);
+        ArrayHelper::multisort($array, $keys, $direction, $sortFlag);
+
+        $expected = array(
+            array("firstname" => "Patricia", "lastname" => "Williams", "age" => 7),
+            array("firstname" => "Mary", "lastname" => "Johnson", "age" => 25),
+            array("firstname" => "James", "lastname" => "Brown", "age" => 31),
+            array("firstname" => "Amanda", "lastname" => "Miller", "age" => 18),
+        );
+        $this->assertEquals($expected, $array);
     }
 }
