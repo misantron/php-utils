@@ -1,20 +1,17 @@
 {
-  "name": "misantron/array-utils",
+  "name": "misantron/php-utils",
   "version": "0.1.0",
   "description": "Collection of PHP array helper methods.",
   "license": "MIT",
-  "keywords": [
-    "php",
-    "array",
-    "helper"
-  ],
+  "keywords": ["php", "utility", "array", "string", "helpers"],
   "autoload": {
     "psr-4": {
       "Utility\\": ["src/"]
     }
   },
   "require": {
-    "php": ">=5.3.3"
+    "php": ">=5.3.3",
+    "ext-mbstring": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "4.4.*",
