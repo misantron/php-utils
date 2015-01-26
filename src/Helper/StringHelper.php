@@ -46,4 +46,20 @@ class StringHelper
         }
         return $number%10==1&&$number%100!=11?$forms[0]:($number%10>=2&&$number%10<=4&&($number%100<10||$number%100>=20)?$forms[1]:$forms[2]);
     }
+
+    /**
+     * @param int $length
+     * @return string
+     */
+    public static function generateRandom($length = 10)
+    {
+        $randChars = array();
+        $alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $alphabetSize = strlen($alphabet);
+        while(--$length+1){
+            $randChars[] = $alphabet[mt_rand(0, $alphabetSize-1)];;
+        }
+        shuffle($randChars);
+        return implode('', $randChars);
+    }
 }
