@@ -1,59 +1,60 @@
 <?php
 
-namespace Utility\Test\Helper;
+namespace Utility\Tests;
 
-use Utility\Helper\ArrayHelper;
+use Utility\Exception\InvalidArgumentException;
+use Utility\Exception\NonStaticCallException;
+use Utility\UArray;
 
-class ArrayHelperTest extends \PHPUnit_Framework_TestCase
+class UArrayTest extends \PHPUnit_Framework_TestCase
 {
+    public function testConstructor()
+    {
+        try {
+            new UArray();
+            $this->setExpectedException('\\Utility\\Exception\\NonStaticCallException');
+        } catch(NonStaticCallException $e){
+            $this->assertInstanceOf('\\Utility\\Exception\\NonStaticCallException', $e);
+            $this->assertEquals('Non static call is disabled.', $e->getMessage());
+        }
+    }
+
     public function testGet()
     {
         $array = array();
 
         try {
-            ArrayHelper::get($array, 'key');
-            $this->setExpectedException('\InvalidArgumentException');
-        } catch(\InvalidArgumentException $e){
-            $this->assertInstanceOf('\InvalidArgumentException', $e);
+            UArray::get($array, 'key');
+            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+        } catch(InvalidArgumentException $e){
+            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
             $this->assertEquals('Element with key "key" not found.', $e->getMessage());
         }
 
-        $result = ArrayHelper::get($array, 'key', 'default');
+        $result = UArray::get($array, 'key', 'default');
         $this->assertEquals('default', $result);
 
         $array = array('key1' => 1, 'key2' => 2);
-        $result = ArrayHelper::get($array, 'key1', 'default');
+        $result = UArray::get($array, 'key1', 'default');
         $this->assertEquals(1, $result);
     }
 
     public function testExtractColumn()
     {
-        $array = false;
-        $result = ArrayHelper::extractColumn($array, 'key1');
-        $this->isNull($result);
-
-        $array = '';
-        $result = ArrayHelper::extractColumn($array, 'key1');
-        $this->isNull($result);
-
-        $array = array();
-        $result = ArrayHelper::extractColumn($array, 'key1');
-        $this->isNull($result);
-
         $array = array(
             10 => array('key1' => 1, 'key2' => 2),
             20 => array('key1' => 3, 'key2' => 4),
         );
 
-        $result = ArrayHelper::extractColumn($array, 'key3');
+        $result = UArray::extractColumn($array, 'key3');
         $expected = array();
         $this->assertEquals($expected, $result);
 
-        $result = ArrayHelper::extractColumn($array, 'key1', true);
+        $result = UArray::extractColumn($array, 'key1', true);
         $expected = array(10 => 1, 20 => 3);
         $this->assertEquals($expected, $result);
 
-        $result = ArrayHelper::extractColumn($array, 'key1', false);
+        $result = UArray::extractColumn($array, 'key1', false);
         $expected = array(0 => 1, 1 => 3);
         $this->assertEquals($expected, $result);
     }
@@ -65,10 +66,10 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
             'key2' => 2,
         );
 
-        $result = ArrayHelper::wrapKeys($array);
+        $result = UArray::wrapKeys($array);
         $this->assertEquals($array, $result);
 
-        $result = ArrayHelper::wrapKeys($array, 'prefix:');
+        $result = UArray::wrapKeys($array, 'prefix:');
         $this->assertArrayHasKey('prefix:key1', $result);
         $this->assertArrayHasKey('prefix:key2', $result);
 
@@ -78,7 +79,7 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals($expected, $result);
 
-        $result = ArrayHelper::wrapKeys($array, false, ':postfix');
+        $result = UArray::wrapKeys($array, false, ':postfix');
         $this->assertArrayHasKey('key1:postfix', $result);
         $this->assertArrayHasKey('key2:postfix', $result);
 
@@ -88,7 +89,7 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals($expected, $result);
 
-        $result = ArrayHelper::wrapKeys($array, 'prefix:', ':postfix');
+        $result = UArray::wrapKeys($array, 'prefix:', ':postfix');
         $this->assertArrayHasKey('prefix:key1:postfix', $result);
         $this->assertArrayHasKey('prefix:key2:postfix', $result);
 
@@ -106,24 +107,24 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
             'key2' => '2',
         );
 
-        $result = ArrayHelper::wrapValues($array);
+        $result = UArray::wrapValues($array);
         $this->assertEquals($array, $result);
 
-        $result = ArrayHelper::wrapValues($array, 'prefix:');
+        $result = UArray::wrapValues($array, 'prefix:');
         $expected = array(
             'key1' => 'prefix:1',
             'key2' => 'prefix:2',
         );
         $this->assertEquals($expected, $result);
 
-        $result = ArrayHelper::wrapValues($array, false, ':postfix');
+        $result = UArray::wrapValues($array, false, ':postfix');
         $expected = array(
             'key1' => '1:postfix',
             'key2' => '2:postfix',
         );
         $this->assertEquals($expected, $result);
 
-        $result = ArrayHelper::wrapValues($array, 'prefix:', ':postfix');
+        $result = UArray::wrapValues($array, 'prefix:', ':postfix');
         $expected = array(
             'key1' => 'prefix:1:postfix',
             'key2' => 'prefix:2:postfix',
@@ -135,23 +136,23 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
     {
         $array = array(1, 3, 'val1', 'val2', 7, 14, 'val3', null, false);
 
-        $result = ArrayHelper::filterValues($array, 'abc');
+        $result = UArray::filterValues($array, 'abc');
         $expected = array(1, 3, 'val1', 'val2', 7, 14, 'val3');
         $this->assertEquals($expected, $result);
 
-        $result = ArrayHelper::filterValues($array, ArrayHelper::TYPE_INTEGER, true);
+        $result = UArray::filterValues($array, UArray::TYPE_INTEGER, true);
         $expected = array(0 => 1, 1 => 3, 4 => 7, 5 => 14);
         $this->assertEquals($expected, $result);
 
-        $result = ArrayHelper::filterValues($array, ArrayHelper::TYPE_INTEGER, false);
+        $result = UArray::filterValues($array, UArray::TYPE_INTEGER, false);
         $expected = array(1, 3, 7, 14);
         $this->assertEquals($expected, $result);
 
-        $result = ArrayHelper::filterValues($array, ArrayHelper::TYPE_STRING, true);
+        $result = UArray::filterValues($array, UArray::TYPE_STRING, true);
         $expected = array(2 => 'val1', 3 => 'val2', 6 => 'val3');
         $this->assertEquals($expected, $result);
 
-        $result = ArrayHelper::filterValues($array, ArrayHelper::TYPE_STRING, false);
+        $result = UArray::filterValues($array, UArray::TYPE_STRING, false);
         $expected = array('val1', 'val2', 'val3',);
         $this->assertEquals($expected, $result);
     }
@@ -165,13 +166,13 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
             4 => 'value4',
         );
 
-        $result = ArrayHelper::searchKey($array, 5);
+        $result = UArray::searchKey($array, 5);
         $this->assertEquals(false, $result);
 
-        $result = ArrayHelper::searchKey($array, 3);
+        $result = UArray::searchKey($array, 3);
         $this->assertEquals(2, $result);
 
-        $result = ArrayHelper::searchKey($array, 1);
+        $result = UArray::searchKey($array, 1);
         $this->assertEquals(0, $result);
     }
 
@@ -184,10 +185,10 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
         );
 
         try {
-            ArrayHelper::insertBefore($array, 'key5', 'value5');
-            $this->setExpectedException('\InvalidArgumentException');
-        } catch(\InvalidArgumentException $e){
-            $this->assertInstanceOf('\InvalidArgumentException', $e);
+            UArray::insertBefore($array, 'key5', 'value5');
+            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+        } catch(InvalidArgumentException $e){
+            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
             $this->assertEquals('Element with key "key5" not found.', $e->getMessage());
         }
 
@@ -197,9 +198,9 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
             0 => 'value5',
             'key3' => 'value3',
         );
-        $result = ArrayHelper::insertBefore($array, 'key3', 'value5');
+        $result = UArray::insertBefore($array, 'key3', 'value5');
         $this->assertEquals($expected, $result);
-        $result = ArrayHelper::insertBefore($array, 'key3', array('value5'));
+        $result = UArray::insertBefore($array, 'key3', array('value5'));
         $this->assertEquals($expected, $result);
 
         $expected = array(
@@ -208,9 +209,9 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
             'key5' => 'value5',
             'key3' => 'value3',
         );
-        $result = ArrayHelper::insertBefore($array, 'key3', 'value5', 'key5');
+        $result = UArray::insertBefore($array, 'key3', 'value5', 'key5');
         $this->assertEquals($expected, $result);
-        $result = ArrayHelper::insertBefore($array, 'key3', array('value5'), 'key5');
+        $result = UArray::insertBefore($array, 'key3', array('value5'), 'key5');
         $this->assertEquals($expected, $result);
     }
 
@@ -228,9 +229,9 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
             'key3' => 'value3',
             0 => 'value4',
         );
-        $result = ArrayHelper::insertAfter($array, 'key4', 'value4');
+        $result = UArray::insertAfter($array, 'key4', 'value4');
         $this->assertEquals($expected, $result);
-        $result = ArrayHelper::insertAfter($array, 'key4', array('value4'));
+        $result = UArray::insertAfter($array, 'key4', array('value4'));
         $this->assertEquals($expected, $result);
 
         $expected = array(
@@ -239,9 +240,9 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
             'key3' => 'value3',
             'key5' => 'value4',
         );
-        $result = ArrayHelper::insertAfter($array, 'key4', 'value4', 'key5');
+        $result = UArray::insertAfter($array, 'key4', 'value4', 'key5');
         $this->assertEquals($expected, $result);
-        $result = ArrayHelper::insertAfter($array, 'key4', array('value4'), 'key5');
+        $result = UArray::insertAfter($array, 'key4', array('value4'), 'key5');
         $this->assertEquals($expected, $result);
 
         $expected = array(
@@ -250,9 +251,9 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
             'key2' => 'value2',
             'key3' => 'value3',
         );
-        $result = ArrayHelper::insertAfter($array, 'key1', 'value4');
+        $result = UArray::insertAfter($array, 'key1', 'value4');
         $this->assertEquals($expected, $result);
-        $result = ArrayHelper::insertAfter($array, 'key1', array('value4'));
+        $result = UArray::insertAfter($array, 'key1', array('value4'));
         $this->assertEquals($expected, $result);
 
         $expected = array(
@@ -261,9 +262,9 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
             'key2' => 'value2',
             'key3' => 'value3',
         );
-        $result = ArrayHelper::insertAfter($array, 'key1', 'value4', 'key5');
+        $result = UArray::insertAfter($array, 'key1', 'value4', 'key5');
         $this->assertEquals($expected, $result);
-        $result = ArrayHelper::insertAfter($array, 'key1', array('value4'), 'key5');
+        $result = UArray::insertAfter($array, 'key1', array('value4'), 'key5');
         $this->assertEquals($expected, $result);
     }
 
@@ -289,7 +290,7 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
                 )
             )
         );
-        $result = ArrayHelper::mergeRecursive($array1, $array2);
+        $result = UArray::mergeRecursive($array1, $array2);
         $expected = array(
             'key1' => 'value1',
             'key2' => array(
@@ -321,7 +322,7 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
             'value2',
             'value3'
         );
-        $result = ArrayHelper::flatten($array);
+        $result = UArray::flatten($array);
         $this->assertEquals($expected, $result);
     }
 
@@ -333,19 +334,27 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
             array('key1' => 'value31', 'key2' => 'value32'),
         );
 
-        $result = ArrayHelper::map($array, 'key1', 'key3');
+        $result = UArray::map($array, 'key1', 'key3');
         $expected = array();
         $this->assertEquals($expected, $result);
 
-        $result = ArrayHelper::map($array, 'key3', 'key2');
+        $result = UArray::map($array, 'key3', 'key2');
         $expected = array();
         $this->assertEquals($expected, $result);
 
-        $result = ArrayHelper::map($array, 'key1', 'key2');
+        $result = UArray::map($array, 'key1', 'key2');
         $expected = array(
             'value11' => 'value12',
             'value21' => 'value22',
             'value31' => 'value32'
+        );
+        $this->assertEquals($expected, $result);
+
+        $result = UArray::map($array, 'key2');
+        $expected = array(
+            'value12' => array('key1' => 'value11', 'key2' => 'value12'),
+            'value22' => array('key1' => 'value21', 'key2' => 'value22'),
+            'value32' => array('key1' => 'value31', 'key2' => 'value32'),
         );
         $this->assertEquals($expected, $result);
     }
@@ -356,10 +365,10 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
         $keys = array('key1', 'key2');
 
         try {
-            ArrayHelper::multisort($array, $keys);
-            $this->setExpectedException('\InvalidArgumentException');
-        } catch(\InvalidArgumentException $e){
-            $this->assertInstanceOf('\InvalidArgumentException', $e);
+            UArray::multisort($array, $keys);
+            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+        } catch(InvalidArgumentException $e){
+            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
             $this->assertEquals('Params $arr or $key is invalid for sorting.', $e->getMessage());
         }
 
@@ -367,10 +376,10 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
         $keys = array();
 
         try {
-            ArrayHelper::multisort($array, $keys);
-            $this->setExpectedException('\InvalidArgumentException');
-        } catch(\InvalidArgumentException $e){
-            $this->assertInstanceOf('\InvalidArgumentException', $e);
+            UArray::multisort($array, $keys);
+            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+        } catch(InvalidArgumentException $e){
+            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
             $this->assertEquals('Params $arr or $key is invalid for sorting.', $e->getMessage());
         }
 
@@ -378,10 +387,10 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
         $direction = array(SORT_ASC);
 
         try {
-            ArrayHelper::multisort($array, $keys, $direction);
-            $this->setExpectedException('\InvalidArgumentException');
-        } catch(\InvalidArgumentException $e){
-            $this->assertInstanceOf('\InvalidArgumentException', $e);
+            UArray::multisort($array, $keys, $direction);
+            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+        } catch(InvalidArgumentException $e){
+            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
             $this->assertEquals('The length of $direction and $keys params must be equal.', $e->getMessage());
         }
 
@@ -389,10 +398,10 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
         $sortFlag = array(SORT_REGULAR);
 
         try {
-            ArrayHelper::multisort($array, $keys, $direction, $sortFlag);
-            $this->setExpectedException('\InvalidArgumentException');
-        } catch(\InvalidArgumentException $e){
-            $this->assertInstanceOf('\InvalidArgumentException', $e);
+            UArray::multisort($array, $keys, $direction, $sortFlag);
+            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+        } catch(InvalidArgumentException $e){
+            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
             $this->assertEquals('The length of $sortFlag and $keys params must be equal.', $e->getMessage());
         }
     }
@@ -407,7 +416,7 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
         );
 
         $keys = 'firstname';
-        ArrayHelper::multisort($array, $keys);
+        UArray::multisort($array, $keys);
 
         $expected = array(
             array("firstname" => "Amanda", "lastname" => "Miller", "age" => 18),
@@ -420,7 +429,7 @@ class ArrayHelperTest extends \PHPUnit_Framework_TestCase
         $keys = array('firstname', 'age');
         $direction = array(SORT_DESC, SORT_ASC);
         $sortFlag = array(SORT_REGULAR, SORT_REGULAR);
-        ArrayHelper::multisort($array, $keys, $direction, $sortFlag);
+        UArray::multisort($array, $keys, $direction, $sortFlag);
 
         $expected = array(
             array("firstname" => "Patricia", "lastname" => "Williams", "age" => 7),

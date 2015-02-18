@@ -1,17 +1,24 @@
 <?php
 
-namespace Utility\Helper;
+namespace Utility;
 
-/**
- * Class ArrayHelper
- * @package Utility\Helper
- */
-class ArrayHelper
+use Utility\Exception\InvalidArgumentException;
+use Utility\Exception\NonStaticCallException;
+
+class UArray
 {
     const
         TYPE_INTEGER = 'integer',
         TYPE_STRING = 'string'
     ;
+
+    /**
+     * @throws NonStaticCallException
+     */
+    function __construct()
+    {
+        throw new NonStaticCallException('Non static call is disabled.');
+    }
 
     /**
      * Get selected value from array by the key
@@ -20,7 +27,7 @@ class ArrayHelper
      * @param string $key
      * @param string|null $default
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return mixed
      */
     public static function get(&$arr, $key, $default = null)
@@ -30,7 +37,7 @@ class ArrayHelper
             $value = $arr[$key];
         } else {
             if(func_num_args() < 3){
-                throw new \InvalidArgumentException('Element with key "' . $key . '" not found.');
+                throw new InvalidArgumentException('Element with key "' . $key . '" not found.');
             }
             $value = $default;
         }
@@ -48,9 +55,6 @@ class ArrayHelper
      */
     public static function extractColumn(&$arr, $columnKey, $preserveKeys = false)
     {
-        if(!is_array($arr) || empty($arr)){
-            return null;
-        }
         $result = array();
         foreach ($arr as $key => $val) {
             if(!isset($val[$columnKey])){
@@ -153,7 +157,7 @@ class ArrayHelper
      * @param array|string $element
      * @param string|null $withKey
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return array
      */
     public static function insertBefore(&$arr, $needleKey, $element, $withKey = null)
@@ -165,7 +169,7 @@ class ArrayHelper
         }
         $offset = self::searchKey($arr, $needleKey);
         if($offset === false){
-            throw new \InvalidArgumentException('Element with key "' . $needleKey . '" not found.');
+            throw new InvalidArgumentException('Element with key "' . $needleKey . '" not found.');
         }
         return array_merge(
             array_slice($arr, 0, $offset, true),
@@ -253,19 +257,19 @@ class ArrayHelper
      * Build a map from multi-dimensional array.
      *
      * @param array $arr
-     * @param string $key
-     * @param string $value
+     * @param string $keyColumn
+     * @param string|null $valColumn
      *
      * @return array
      */
-    public static function map(&$arr, $key, $value)
+    public static function map(&$arr, $keyColumn, $valColumn = null)
     {
         $result = array();
         foreach ($arr as $val) {
-            if(!isset($val[$key]) || !isset($val[$value])){
+            if(!isset($val[$keyColumn]) || ($valColumn !== null && !isset($val[$valColumn]))){
                 break;
             }
-            $result[$val[$key]] = $val[$value];
+            $result[$val[$keyColumn]] = $valColumn === null ? $val : $val[$valColumn];
         }
         return $result;
     }
@@ -278,28 +282,28 @@ class ArrayHelper
      * @param int|array $direction
      * @param int|array $sortFlag
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function multisort(&$arr, $key, $direction = SORT_ASC, $sortFlag = SORT_REGULAR)
     {
         $keys = is_array($key) ? $key : array($key);
         if (empty($keys) || empty($arr)) {
-            throw new \InvalidArgumentException('Params $arr or $key is invalid for sorting.');
+            throw new InvalidArgumentException('Params $arr or $key is invalid for sorting.');
         }
         $n = sizeof($keys);
         if (is_scalar($direction)) {
             $direction = array_fill(0, $n, $direction);
         } elseif (sizeof($direction) !== $n) {
-            throw new \InvalidArgumentException('The length of $direction and $keys params must be equal.');
+            throw new InvalidArgumentException('The length of $direction and $keys params must be equal.');
         }
         if (is_scalar($sortFlag)) {
             $sortFlag = array_fill(0, $n, $sortFlag);
         } elseif (sizeof($sortFlag) !== $n) {
-            throw new \InvalidArgumentException('The length of $sortFlag and $keys params must be equal.');
+            throw new InvalidArgumentException('The length of $sortFlag and $keys params must be equal.');
         }
         $args = array();
         foreach ($keys as $i => $key) {
-            $args[] = static::extractColumn($arr, $key, false);
+            $args[] = static::extractColumn($arr, $key);
             $args[] = $direction[$i];
             $args[] = $sortFlag[$i];
         }

@@ -11,8 +11,8 @@
          syntaxCheck="false"
         >
     <testsuites>
-        <testsuite name="All tests">
-            <directory>./tests/</directory>
+        <testsuite>
+            <directory>./tests/Utility/Tests</directory>
         </testsuite>
     </testsuites>
     <logging>

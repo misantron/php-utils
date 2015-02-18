@@ -1,26 +1,36 @@
 <?php
 
-namespace Utility\Helper;
+namespace Utility;
 
-/**
- * Class StringHelper
- * @package Utility\Helper
- */
-class StringHelper
+use Utility\Exception\ExtensionNotLoadedException;
+use Utility\Exception\InvalidArgumentException;
+use Utility\Exception\NonStaticCallException;
+
+class UString
 {
+    /** @var string */
     protected static $encoding = 'UTF-8';
+
+    /**
+     * @throws NonStaticCallException
+     */
+    function __construct()
+    {
+        throw new NonStaticCallException('Non static call is disabled.');
+    }
 
     /**
      * @param string $string
      * @param int $maxLength
      * @param string|null $encoding
      * @return string
-     * @throws \Exception
+     *
+     * @throws ExtensionNotLoadedException
      */
     public static function cut($string, $maxLength, $encoding = null)
     {
         if(!extension_loaded('mbstring')){
-            throw new \Exception('Mbstring extension is required for using this method.');
+            throw new ExtensionNotLoadedException('Mbstring extension is required for using this method.');
         }
 
         if($encoding === null){
@@ -37,12 +47,13 @@ class StringHelper
      * @param int $number
      * @param array $forms
      * @return string
-     * @throws \InvalidArgumentException
+     *
+     * @throws InvalidArgumentException
      */
     public static function plural($number, $forms)
     {
         if(sizeof($forms) < 3){
-            throw new \InvalidArgumentException('Param $forms must contains three words.');
+            throw new InvalidArgumentException('Param $forms must contains three words.');
         }
         return $number%10==1&&$number%100!=11?$forms[0]:($number%10>=2&&$number%10<=4&&($number%100<10||$number%100>=20)?$forms[1]:$forms[2]);
     }
@@ -61,5 +72,10 @@ class StringHelper
         }
         shuffle($randChars);
         return implode('', $randChars);
+    }
+
+    public static function slugify($string)
+    {
+
     }
 }

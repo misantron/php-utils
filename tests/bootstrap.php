@@ -1,4 +1,3 @@
 <?php
 
-$autoloader = require __DIR__ . '/../vendor/autoload.php';
-$autoloader->add('Utility\\Test\\', __DIR__);
+require __DIR__ . '/../vendor/autoload.php';

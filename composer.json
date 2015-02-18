@@ -1,20 +1,43 @@
 {
   "name": "misantron/php-utils",
-  "version": "0.1.0",
-  "description": "Collection of PHP array helper methods.",
+  "type": "library",
+  "description": "Collection of PHP utility methods.",
   "license": "MIT",
   "keywords": ["php", "utility", "array", "string", "helpers"],
-  "autoload": {
-    "psr-4": {
-      "Utility\\": ["src/"]
+  "homepage": "https://github.com/misantron/php-utils",
+
+  "authors": [
+    {
+      "name": "Alexandr Ivanov",
+      "email": "misantron@gmail.com",
+      "homepage": "https://github.com/misantron"
     }
+  ],
+
+  "support": {
+    "email": "misantron@gmail.com",
+    "issues": "https://github.com/misantron/php-utils/issues"
   },
+
   "require": {
     "php": ">=5.3.3",
     "ext-mbstring": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "4.4.*",
+    "phpunit/phpunit": "~4.4",
     "satooshi/php-coveralls": "dev-master"
+  },
+
+  "autoload": {
+    "psr-0": {
+      "Utility\\": "src/",
+      "Utility\\Tests\\": "tests/"
+    }
+  },
+
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0.x-dev"
+    }
   }
 }
