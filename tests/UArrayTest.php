@@ -1,13 +1,19 @@
 <?php
 
-namespace Utility\Tests;
-
 use Utility\Exception\InvalidArgumentException;
 use Utility\Exception\NonStaticCallException;
 use Utility\UArray;
 
 class UArrayTest extends \PHPUnit_Framework_TestCase
 {
+    public function setup()
+    {
+        $dir = dirname(__FILE__) . '/..';
+        if (file_exists("{$dir}/vendor/autoload.php")) {
+            require_once "{$dir}/vendor/autoload.php";
+        }
+    }
+
     public function testConstructor()
     {
         try {
