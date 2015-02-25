@@ -7,6 +7,8 @@ use Utility\Exception\InvalidArgumentException;
 class UTime extends UAbstract
 {
     /**
+     * Get time diff in human-readable format
+     *
      * @param mixed $from
      * @param mixed $to
      * @return string
@@ -35,6 +37,10 @@ class UTime extends UAbstract
             $toDate = $to;
         } else {
             throw new InvalidArgumentException('$to argument format is invalid.');
+        }
+
+        if($fromDate > $toDate){
+            throw new InvalidArgumentException('$from argument can not be greater than $to argument.');
         }
 
         $diff = $fromDate->diff($toDate);

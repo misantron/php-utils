@@ -1,19 +1,54 @@
-# PHP utility helpers
+# PHP utils
 
-PHP utility helpers - collection of useful helpers.
+Collection of useful PHP utils.
 
 [![Build Status](https://travis-ci.org/misantron/php-utils.svg?branch=master)](https://travis-ci.org/misantron/php-utils)
-[![Coverage Status](https://coveralls.io/repos/misantron/php-utils/badge.png?branch=master)](https://coveralls.io/r/misantron/php-utils?branch=master)
+[![Code Coverage](http://img.shields.io/coveralls/misantron/php-utils.svg)](https://coveralls.io/r/misantron/php-utils)
 
-## Server Requirements
+## Features
 
-- PHP version 5.3.3 or higher.
-- mbstring extension
+- Contains Array, String and Time utilities.
+- Work with PHP version >= 5.3.3 (HHVM is not tested)
+- Base encoding - UTF-8
+- PSR-0 auto loading standard compatible.
+
+## Server requirements
+
+- PHP version >= 5.3.3.
+- PHP mbstring extension.
+
+## External dependencies
+
+- [Slugify](https://github.com/cocur/slugify) library
 
 ## Installation
 
-Add the following dependency to your composer.json:
+You can install library through [Composer](https://getcomposer.org):
 
+```shell
+$ composer require misantron/php-utils
 ```
-"misantron/php-utils": "1.0.*"
+
+## Simple usage example
+
+```php
+
+use Utility\UArray;
+
+$array = array(
+    array('name' => 'Alex', 'age' => 25),
+    array('name' => 'Sara', 'age' => 21),
+    array('name' => 'John', 'age' => 28)
+);
+
+$result = UArray::extractColumn($array, 'age');
+
+var_dump($result);
+
+array(
+    25,
+    21,
+    28
+);
+
 ```

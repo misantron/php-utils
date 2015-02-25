@@ -2,32 +2,27 @@
 
 namespace Utility;
 
+use Cocur\Slugify\Slugify;
 use Utility\Exception\ExtensionNotLoadedException;
 use Utility\Exception\InvalidArgumentException;
-use Utility\Exception\NonStaticCallException;
 
-class UString
+class UString extends UAbstract
 {
     /** @var string */
     protected static $encoding = 'UTF-8';
 
     /**
-     * @throws NonStaticCallException
-     */
-    function __construct()
-    {
-        throw new NonStaticCallException('Non static call is disabled.');
-    }
-
-    /**
-     * @param string $string
-     * @param int $maxLength
+     * Truncate string to given length.
+     *
+     * @param string $str
+     * @param int $length
+     * @param string $ending
      * @param string|null $encoding
      * @return string
      *
      * @throws ExtensionNotLoadedException
      */
-    public static function cutChars($string, $maxLength, $encoding = null)
+    public static function truncate($str, $length, $ending = '', $encoding = null)
     {
         if(!extension_loaded('mbstring')){
             throw new ExtensionNotLoadedException('Mbstring extension is required for using this method.');
@@ -37,22 +32,22 @@ class UString
             $encoding = static::$encoding;
         }
 
-        $length = mb_strlen($string, $encoding);
-        if($length > $maxLength){
-            $length = $maxLength;
-        }
-        return mb_substr($string, 0, $length, $encoding);
+        $strLength = mb_strlen($str, $encoding);
+        return $strLength <= $length ? $str : trim(mb_substr($str, 0, $length, $encoding)) . $ending;
     }
 
     /**
-     * @param string $string
-     * @param int $maxWords
+     * Truncate string to given word count.
+     *
+     * @param string $str
+     * @param int $count
+     * @param string $ending
      * @param string|null $encoding
      * @return string
      *
      * @throws ExtensionNotLoadedException
      */
-    public static function cutWords($string, $maxWords, $encoding = null)
+    public static function truncateWords($str, $count, $ending = '', $encoding = null)
     {
         if(!extension_loaded('mbstring')){
             throw new ExtensionNotLoadedException('Mbstring extension is required for using this method.');
@@ -62,14 +57,16 @@ class UString
             $encoding = static::$encoding;
         }
 
-        preg_match('/^\s*+(?:\S++\s*+){1,' . $maxWords . '}/u', $string, $matches);
-        if (!isset($matches[0]) || mb_strlen($string, $encoding) === mb_strlen($matches[0], $encoding)) {
-            return $string;
+        preg_match('/^\s*+(?:\S++\s*+){1,' . $count . '}/u', $str, $matches);
+        if (!isset($matches[0]) || mb_strlen($str, $encoding) === mb_strlen($matches[0], $encoding)) {
+            return $str;
         }
-        return rtrim($matches[0]);
+        return trim($matches[0]) . $ending;
     }
 
     /**
+     * Return right word form for given number.
+     *
      * @param int $number
      * @param array $forms
      * @param bool $withNumber
@@ -87,6 +84,8 @@ class UString
     }
 
     /**
+     * Generate random string.
+     *
      * @param int $length
      * @return string
      */
@@ -102,8 +101,14 @@ class UString
         return implode('', $randChars);
     }
 
-    public static function slugify($string)
+    /**
+     * Return slug for given string.
+     *
+     * @param string $str
+     * @return string
+     */
+    public static function slugify($str)
     {
-
+        return Slugify::create()->slugify($str);
     }
 }

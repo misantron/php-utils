@@ -3,22 +3,13 @@
 namespace Utility;
 
 use Utility\Exception\InvalidArgumentException;
-use Utility\Exception\NonStaticCallException;
 
-class UArray
+class UArray extends UAbstract
 {
     const
         TYPE_INTEGER = 'integer',
         TYPE_STRING = 'string'
     ;
-
-    /**
-     * @throws NonStaticCallException
-     */
-    function __construct()
-    {
-        throw new NonStaticCallException('Non static call is disabled.');
-    }
 
     /**
      * Get selected value from array by the key
