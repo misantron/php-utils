@@ -32,7 +32,6 @@ $ composer require misantron/php-utils
 ## Simple usage example
 
 ```php
-
 use Utility\UArray;
 
 $array = array(
@@ -50,5 +49,4 @@ array(
     21,
     28
 );
-
 ```
