@@ -445,4 +445,25 @@ class UArrayTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals($expected, $array);
     }
+
+    public function testLoadTranslations()
+    {
+        $result = self::callMethod('\\Utility\\UArray', 'loadTranslations');
+        $this->assertNotNull($result);
+        $this->assertInternalType('array', $result);
+    }
+
+    /**
+     * @param string $obj
+     * @param string $name
+     * @param array $args
+     * @return mixed
+     */
+    protected static function callMethod($obj, $name, $args = array())
+    {
+        $class = new \ReflectionClass($obj);
+        $method = $class->getMethod($name);
+        $method->setAccessible(true);
+        return $method->invokeArgs(null, $args);
+    }
 }

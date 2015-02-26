@@ -16,6 +16,7 @@ class UAbstract
     }
 
     /**
+     * @codeCoverageIgnore
      * @return array
      */
     protected static function loadTranslations()

@@ -64,5 +64,55 @@ class UTimeTest extends \PHPUnit_Framework_TestCase
         $result = UTime::timeDiff(1424380190, 1424808432);
         $expected = '4 дня назад';
         $this->assertEquals($expected, $result);
+
+        $result = UTime::timeDiff(new \DateTime('2015-01-13'), new \DateTime('2015-01-13'));
+        $expected = '0 секунд назад';
+        $this->assertEquals($expected, $result);
+
+        $result = UTime::timeDiff('2014-01-13', '2015-01-15');
+        $expected = '1 год назад';
+        $this->assertEquals($expected, $result);
+
+        $result = UTime::timeDiff('2014-11-13', '2015-02-15');
+        $expected = '3 месяца назад';
+        $this->assertEquals($expected, $result);
+
+        $result = UTime::timeDiff('2015-02-13', '2015-02-26');
+        $expected = '2 недели назад';
+        $this->assertEquals($expected, $result);
+
+        $result = UTime::timeDiff(new \DateTime('2015-02-23'), new \DateTime('2015-02-26'));
+        $expected = '3 дня назад';
+        $this->assertEquals($expected, $result);
+
+        $result = UTime::timeDiff(new \DateTime('2015-02-26 13:05'), new \DateTime('2015-02-26 22:16'));
+        $expected = '9 часов назад';
+        $this->assertEquals($expected, $result);
+
+        $result = UTime::timeDiff(new \DateTime('2015-02-26 22:16:21'), new \DateTime('2015-02-26 22:16:37'));
+        $expected = '16 секунд назад';
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testLoadTranslations()
+    {
+        $result = self::callMethod('\\Utility\\UTime', 'loadTranslations');
+        $this->assertNotNull($result);
+        $this->assertInternalType('array', $result);
+        $this->assertNotEmpty($result);
+    }
+
+    /**
+     * @param string $obj
+     * @param string $name
+     * @param array $args
+     * @return mixed
+     */
+    protected static function callMethod($obj, $name, $args = array())
+    {
+        $class = new \ReflectionClass($obj);
+        $method = $class->getMethod($name);
+        $method->setAccessible(true);
+        return $method->invokeArgs(null, $args);
     }
 }

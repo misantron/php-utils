@@ -17,23 +17,20 @@ class UString extends UAbstract
      * @param string $str
      * @param int $length
      * @param string $ending
-     * @param string|null $encoding
      * @return string
      *
      * @throws ExtensionNotLoadedException
      */
-    public static function truncate($str, $length, $ending = '', $encoding = null)
+    public static function truncate($str, $length, $ending = '')
     {
+        // @codeCoverageIgnoreStart
         if(!extension_loaded('mbstring')){
             throw new ExtensionNotLoadedException('Mbstring extension is required for using this method.');
         }
+        // @codeCoverageIgnoreEnd
 
-        if($encoding === null){
-            $encoding = static::$encoding;
-        }
-
-        $strLength = mb_strlen($str, $encoding);
-        return $strLength <= $length ? $str : trim(mb_substr($str, 0, $length, $encoding)) . $ending;
+        $strLength = mb_strlen($str, static::$encoding);
+        return $strLength <= $length ? $str : trim(mb_substr($str, 0, $length, static::$encoding)) . $ending;
     }
 
     /**
@@ -42,23 +39,20 @@ class UString extends UAbstract
      * @param string $str
      * @param int $count
      * @param string $ending
-     * @param string|null $encoding
      * @return string
      *
      * @throws ExtensionNotLoadedException
      */
-    public static function truncateWords($str, $count, $ending = '', $encoding = null)
+    public static function truncateWords($str, $count, $ending = '')
     {
+        // @codeCoverageIgnoreStart
         if(!extension_loaded('mbstring')){
             throw new ExtensionNotLoadedException('Mbstring extension is required for using this method.');
         }
-
-        if($encoding === null){
-            $encoding = static::$encoding;
-        }
+        // @codeCoverageIgnoreEnd
 
         preg_match('/^\s*+(?:\S++\s*+){1,' . $count . '}/u', $str, $matches);
-        if (!isset($matches[0]) || mb_strlen($str, $encoding) === mb_strlen($matches[0], $encoding)) {
+        if (!isset($matches[0]) || mb_strlen($str, static::$encoding) === mb_strlen($matches[0], static::$encoding)) {
             return $str;
         }
         return trim($matches[0]) . $ending;

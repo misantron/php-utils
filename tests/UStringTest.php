@@ -1,6 +1,7 @@
 <?php
 
 use Utility\Exception\NonStaticCallException;
+use Utility\Exception\InvalidArgumentException;
 use Utility\UString;
 
 class UStringTest extends \PHPUnit_Framework_TestCase
@@ -26,6 +27,10 @@ class UStringTest extends \PHPUnit_Framework_TestCase
 
     public function testTruncate()
     {
+        if (!extension_loaded('mbstring')) {
+            $this->markTestSkipped('The mbstring extension is not available.');
+        }
+
         $result = UString::truncate('http://www.php.net/manual/en/function.substr.php', 12);
         $expected = 'http://www.p';
         $this->assertEquals($expected, $result);
@@ -45,6 +50,10 @@ class UStringTest extends \PHPUnit_Framework_TestCase
 
     public function testTruncateWords()
     {
+        if (!extension_loaded('mbstring')) {
+            $this->markTestSkipped('The mbstring extension is not available.');
+        }
+
         $result = UString::truncateWords('Давно выяснено, что при оценке дизайна и композиции читаемый текст мешает сосредоточиться.', 3);
         $expected = 'Давно выяснено, что';
         $this->assertEquals($expected, $result);
@@ -60,10 +69,22 @@ class UStringTest extends \PHPUnit_Framework_TestCase
         $result = UString::truncateWords('Lorem ipsum dolor sit amet, consectetur adipiscing elit', 6, '...');
         $expected = 'Lorem ipsum dolor sit amet, consectetur...';
         $this->assertEquals($expected, $result);
+
+        $result = UString::truncateWords('Lorem ipsum', 5);
+        $expected = 'Lorem ipsum';
+        $this->assertEquals($expected, $result);
     }
 
     public function testPlural()
     {
+        try {
+            UString::plural(12, array('страница', 'страниц'));
+            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+        } catch(InvalidArgumentException $e){
+            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
+            $this->assertEquals('Param $forms must contains three words.', $e->getMessage());
+        }
+
         $result = UString::plural(5, array('машина', 'машины', 'машин'));
         $expected = 'машин';
         $this->assertEquals($expected, $result);
@@ -109,5 +130,26 @@ class UStringTest extends \PHPUnit_Framework_TestCase
         $expected = 'c-est-du-francais';
         $result = UString::slugify('..C’est du français !');
         $this->assertEquals($expected, $result);
+    }
+
+    public function testLoadTranslations()
+    {
+        $result = self::callMethod('\\Utility\\UString', 'loadTranslations');
+        $this->assertNotNull($result);
+        $this->assertInternalType('array', $result);
+    }
+
+    /**
+     * @param string $obj
+     * @param string $name
+     * @param array $args
+     * @return mixed
+     */
+    protected static function callMethod($obj, $name, $args = array())
+    {
+        $class = new \ReflectionClass($obj);
+        $method = $class->getMethod($name);
+        $method->setAccessible(true);
+        return $method->invokeArgs(null, $args);
     }
 }
