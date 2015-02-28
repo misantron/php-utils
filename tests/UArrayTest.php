@@ -294,7 +294,8 @@ class UArrayTest extends \PHPUnit_Framework_TestCase
                 'key21' => array(
                     'value23'
                 )
-            )
+            ),
+            'value4'
         );
         $result = UArray::mergeRecursive($array1, $array2);
         $expected = array(
@@ -310,6 +311,7 @@ class UArrayTest extends \PHPUnit_Framework_TestCase
                 'value223',
             ),
             'key3' => 'value3',
+            'value4'
         );
         $this->assertEquals($expected, $result);
     }
