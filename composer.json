@@ -2,8 +2,9 @@
   "name": "misantron/php-utils",
   "type": "library",
   "description": "Collection of useful PHP utils.",
+  "version": "0.9.0",
   "license": "MIT",
-  "keywords": ["php", "utility", "array", "string", "helpers"],
+  "keywords": ["php", "utilities", "array", "string", "datetime"],
   "homepage": "https://github.com/misantron/php-utils",
 
   "authors": [
@@ -26,18 +27,14 @@
   },
   "require-dev": {
     "phpunit/phpunit": "~4.4",
-    "satooshi/php-coveralls": "dev-master"
+    "satooshi/php-coveralls": "dev-master",
+    "phpdocumentor/phpdocumentor" : "~2.8",
+    "squizlabs/php_codesniffer": "2.*"
   },
 
   "autoload": {
     "psr-0": {
       "Utility\\": "src/"
-    }
-  },
-
-  "extra": {
-    "branch-alias": {
-      "dev-master": "0.9.x-dev"
     }
   }
 }
