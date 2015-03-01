@@ -150,10 +150,6 @@ class UStringTest extends \PHPUnit_Framework_TestCase
         $result = UString::fileSize(1424380190, 4);
         $this->assertEquals($expected, $result);
 
-        $expected = '2 Гб';
-        $result = UString::fileSize(PHP_INT_MAX);
-        $this->assertEquals($expected, $result);
-
         $expected = '371.28 Кб';
         $result = UString::fileSize(380190);
         $this->assertEquals($expected, $result);
