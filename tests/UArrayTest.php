@@ -1,19 +1,13 @@
 <?php
 
+require_once 'TestCase.php';
+
 use Utility\Exception\InvalidArgumentException;
 use Utility\Exception\NonStaticCallException;
 use Utility\UArray;
 
-class UArrayTest extends \PHPUnit_Framework_TestCase
+class UArrayTest extends TestCase
 {
-    public function setup()
-    {
-        $vendorAutoloadPath = dirname(__FILE__) . '/../vendor/autoload.php';
-        if (file_exists($vendorAutoloadPath)) {
-            require_once $vendorAutoloadPath;
-        }
-    }
-
     public function testConstructor()
     {
         try {
@@ -457,21 +451,5 @@ class UArrayTest extends \PHPUnit_Framework_TestCase
             $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
             $this->assertEquals('Can not load translation for method.', $e->getMessage());
         }
-    }
-
-    /**
-     * Call protected class methods using reflection
-     *
-     * @param string $obj
-     * @param string $name
-     * @param array $args
-     * @return mixed
-     */
-    protected static function callMethod($obj, $name, $args = array())
-    {
-        $class = new \ReflectionClass($obj);
-        $method = $class->getMethod($name);
-        $method->setAccessible(true);
-        return $method->invokeArgs(null, $args);
     }
 }

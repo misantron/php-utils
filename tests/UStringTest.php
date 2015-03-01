@@ -1,19 +1,13 @@
 <?php
 
+require_once 'TestCase.php';
+
 use Utility\Exception\NonStaticCallException;
 use Utility\Exception\InvalidArgumentException;
 use Utility\UString;
 
-class UStringTest extends \PHPUnit_Framework_TestCase
+class UStringTest extends TestCase
 {
-    public function setup()
-    {
-        $vendorAutoloadPath = dirname(__FILE__) . '/../vendor/autoload.php';
-        if (file_exists($vendorAutoloadPath)) {
-            require_once $vendorAutoloadPath;
-        }
-    }
-
     public function testConstructor()
     {
         try {
@@ -168,21 +162,5 @@ class UStringTest extends \PHPUnit_Framework_TestCase
         $result = static::callMethod('\\Utility\\UString', 'loadTranslations', array('fileSize'));
         $this->assertNotNull($result);
         $this->assertInternalType('array', $result);
-    }
-
-    /**
-     * Call protected class method using reflection
-     *
-     * @param string $obj
-     * @param string $name
-     * @param array $args
-     * @return mixed
-     */
-    protected static function callMethod($obj, $name, $args = array())
-    {
-        $class = new \ReflectionClass($obj);
-        $method = $class->getMethod($name);
-        $method->setAccessible(true);
-        return $method->invokeArgs(null, $args);
     }
 }
