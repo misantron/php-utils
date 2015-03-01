@@ -132,9 +132,52 @@ class UStringTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $result);
     }
 
+    public function testFileSize()
+    {
+        try {
+            UString::fileSize(PHP_INT_MAX + 4);
+            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+        } catch(InvalidArgumentException $e){
+            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
+            $this->assertEquals('Bytes size exceeds PHP_INT_MAX.', $e->getMessage());
+        }
+
+        $expected = '1.33 Гб';
+        $result = UString::fileSize(1424380190);
+        $this->assertEquals($expected, $result);
+
+        $expected = '1.3266 Гб';
+        $result = UString::fileSize(1424380190, 4);
+        $this->assertEquals($expected, $result);
+
+        $expected = '2 Гб';
+        $result = UString::fileSize(PHP_INT_MAX);
+        $this->assertEquals($expected, $result);
+
+        $expected = '371.28 Кб';
+        $result = UString::fileSize(380190);
+        $this->assertEquals($expected, $result);
+
+        $expected = '1.391 Кб';
+        $result = UString::fileSize(1424, 3);
+        $this->assertEquals($expected, $result);
+
+        $expected = '23.25 Мб';
+        $result = UString::fileSize(24380156);
+        $this->assertEquals($expected, $result);
+    }
+
     public function testLoadTranslations()
     {
-        $result = self::callMethod('\\Utility\\UString', 'loadTranslations');
+        try {
+            static::callMethod('\\Utility\\UString', 'loadTranslations', array('fileSize1'));
+            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+        } catch(InvalidArgumentException $e){
+            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
+            $this->assertEquals('Can not load translation for method.', $e->getMessage());
+        }
+
+        $result = static::callMethod('\\Utility\\UString', 'loadTranslations', array('fileSize'));
         $this->assertNotNull($result);
         $this->assertInternalType('array', $result);
     }
