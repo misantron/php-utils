@@ -18,7 +18,7 @@ class UArrayTest extends \PHPUnit_Framework_TestCase
     {
         try {
             new UArray();
-            $this->setExpectedException('\\Utility\\Exception\\NonStaticCallException');
+            $this->fail('Expected exception not thrown');
         } catch(NonStaticCallException $e){
             $this->assertInstanceOf('\\Utility\\Exception\\NonStaticCallException', $e);
             $this->assertEquals('Non static call is disabled.', $e->getMessage());
@@ -31,7 +31,7 @@ class UArrayTest extends \PHPUnit_Framework_TestCase
 
         try {
             UArray::get($array, 'key');
-            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+            $this->fail('Expected exception not thrown');
         } catch(InvalidArgumentException $e){
             $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
             $this->assertEquals('Element with key "key" not found.', $e->getMessage());
@@ -192,7 +192,7 @@ class UArrayTest extends \PHPUnit_Framework_TestCase
 
         try {
             UArray::insertBefore($array, 'key5', 'value5');
-            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+            $this->fail('Expected exception not thrown');
         } catch(InvalidArgumentException $e){
             $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
             $this->assertEquals('Element with key "key5" not found.', $e->getMessage());
@@ -374,7 +374,7 @@ class UArrayTest extends \PHPUnit_Framework_TestCase
 
         try {
             UArray::multisort($array, $keys);
-            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+            $this->fail('Expected exception not thrown');
         } catch(InvalidArgumentException $e){
             $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
             $this->assertEquals('Params $arr or $key is invalid for sorting.', $e->getMessage());
@@ -385,7 +385,7 @@ class UArrayTest extends \PHPUnit_Framework_TestCase
 
         try {
             UArray::multisort($array, $keys);
-            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+            $this->fail('Expected exception not thrown');
         } catch(InvalidArgumentException $e){
             $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
             $this->assertEquals('Params $arr or $key is invalid for sorting.', $e->getMessage());
@@ -396,7 +396,7 @@ class UArrayTest extends \PHPUnit_Framework_TestCase
 
         try {
             UArray::multisort($array, $keys, $direction);
-            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+            $this->fail('Expected exception not thrown');
         } catch(InvalidArgumentException $e){
             $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
             $this->assertEquals('The length of $direction and $keys params must be equal.', $e->getMessage());
@@ -407,7 +407,7 @@ class UArrayTest extends \PHPUnit_Framework_TestCase
 
         try {
             UArray::multisort($array, $keys, $direction, $sortFlag);
-            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+            $this->fail('Expected exception not thrown');
         } catch(InvalidArgumentException $e){
             $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
             $this->assertEquals('The length of $sortFlag and $keys params must be equal.', $e->getMessage());
@@ -452,7 +452,7 @@ class UArrayTest extends \PHPUnit_Framework_TestCase
     {
         try {
             static::callMethod('\\Utility\\UString', 'loadTranslations', array('someMethod'));
-            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+            $this->fail('Expected exception not thrown');
         } catch(InvalidArgumentException $e){
             $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
             $this->assertEquals('Can not load translation for method.', $e->getMessage());

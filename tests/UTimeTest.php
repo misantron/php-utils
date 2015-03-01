@@ -20,7 +20,7 @@ class UTimeTest extends \PHPUnit_Framework_TestCase
     {
         try {
             new UTime();
-            $this->setExpectedException('\\Utility\\Exception\\NonStaticCallException');
+            $this->fail('Expected exception not thrown');
         } catch(NonStaticCallException $e){
             $this->assertInstanceOf('\\Utility\\Exception\\NonStaticCallException', $e);
             $this->assertEquals('Non static call is disabled.', $e->getMessage());
@@ -31,28 +31,28 @@ class UTimeTest extends \PHPUnit_Framework_TestCase
     {
         try {
             UTime::timeDiff(true, '2015-02-01');
-            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+            $this->fail('Expected exception not thrown');
         } catch(InvalidArgumentException $e){
             $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
         }
 
         try {
             UTime::timeDiff(true, false);
-            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+            $this->fail('Expected exception not thrown');
         } catch(InvalidArgumentException $e){
             $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
         }
 
         try {
             UTime::timeDiff(1424380190, false);
-            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+            $this->fail('Expected exception not thrown');
         } catch(InvalidArgumentException $e){
             $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
         }
 
         try {
             UTime::timeDiff('2015-03-04', '2015-02-01');
-            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+            $this->fail('Expected exception not thrown');
         } catch(InvalidArgumentException $e){
             $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
         }
@@ -98,7 +98,7 @@ class UTimeTest extends \PHPUnit_Framework_TestCase
     {
         try {
             static::callMethod('\\Utility\\UString', 'loadTranslations', array('timeDiffSomething'));
-            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+            $this->fail('Expected exception not thrown');
         } catch(InvalidArgumentException $e){
             $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
             $this->assertEquals('Can not load translation for method.', $e->getMessage());

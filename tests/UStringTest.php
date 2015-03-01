@@ -18,7 +18,7 @@ class UStringTest extends \PHPUnit_Framework_TestCase
     {
         try {
             new UString();
-            $this->setExpectedException('\\Utility\\Exception\\NonStaticCallException');
+            $this->fail('Expected exception not thrown');
         } catch(NonStaticCallException $e){
             $this->assertInstanceOf('\\Utility\\Exception\\NonStaticCallException', $e);
             $this->assertEquals('Non static call is disabled.', $e->getMessage());
@@ -79,7 +79,7 @@ class UStringTest extends \PHPUnit_Framework_TestCase
     {
         try {
             UString::plural(12, array('страница', 'страниц'));
-            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+            $this->fail('Expected exception not thrown');
         } catch(InvalidArgumentException $e){
             $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
             $this->assertEquals('Param $forms must contains three words.', $e->getMessage());
@@ -137,6 +137,7 @@ class UStringTest extends \PHPUnit_Framework_TestCase
         try {
             $bytes = PHP_INT_MAX + 36;
             UString::fileSize($bytes);
+            $this->fail('Expected exception not thrown');
         } catch(InvalidArgumentException $e){
             $this->assertInstanceOf('Utility\Exception\InvalidArgumentException', $e);
             $this->assertEquals('Bytes size exceeds PHP_INT_MAX.', $e->getMessage());
@@ -167,7 +168,7 @@ class UStringTest extends \PHPUnit_Framework_TestCase
     {
         try {
             static::callMethod('\\Utility\\UString', 'loadTranslations', array('fileSize1'));
-            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+            $this->fail('Expected exception not thrown');
         } catch(InvalidArgumentException $e){
             $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
             $this->assertEquals('Can not load translation for method.', $e->getMessage());
