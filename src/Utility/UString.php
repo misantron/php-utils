@@ -110,13 +110,9 @@ class UString extends UAbstract
      * @param int $bytes
      * @param int $precision
      * @return string
-     * @throws InvalidArgumentException
      */
     public static function fileSize($bytes, $precision = 2)
     {
-        if($bytes > PHP_INT_MAX){
-            throw new InvalidArgumentException('Bytes size exceeds PHP_INT_MAX.');
-        }
         $translations = static::loadTranslations(__FUNCTION__);
         $translations = array_values($translations);
         $factor = (int)floor((strlen($bytes) - 1) / 3);
