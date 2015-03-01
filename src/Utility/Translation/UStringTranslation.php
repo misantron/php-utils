@@ -11,6 +11,8 @@ class UStringTranslation extends UAbstractTranslation
             'mb' => 'Мб',
             'gb' => 'Гб',
             'tb' => 'Тб',
+            'pb' => 'Пб',
+            'eb' => 'Eб',
         ),
     );
 }
