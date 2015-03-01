@@ -96,13 +96,23 @@ class UTimeTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadTranslations()
     {
-        $result = self::callMethod('\\Utility\\UTime', 'loadTranslations');
+        try {
+            static::callMethod('\\Utility\\UString', 'loadTranslations', array('timeDiffSomething'));
+            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+        } catch(InvalidArgumentException $e){
+            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
+            $this->assertEquals('Can not load translation for method.', $e->getMessage());
+        }
+
+        $result = static::callMethod('\\Utility\\UTime', 'loadTranslations', array('timeDiff'));
         $this->assertNotNull($result);
         $this->assertInternalType('array', $result);
         $this->assertNotEmpty($result);
     }
 
     /**
+     * Call protected class method using reflection
+     *
      * @param string $obj
      * @param string $name
      * @param array $args

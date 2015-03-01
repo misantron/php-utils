@@ -183,6 +183,8 @@ class UStringTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Call protected class method using reflection
+     *
      * @param string $obj
      * @param string $name
      * @param array $args

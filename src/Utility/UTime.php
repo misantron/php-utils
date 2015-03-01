@@ -45,24 +45,24 @@ class UTime extends UAbstract
 
         $diff = $fromDate->diff($toDate);
 
-        $translations = static::loadTranslations();
+        $translations = static::loadTranslations(__FUNCTION__);
 
         if ($diff->y >= 1) {
-            $text = UString::plural($diff->y, array($translations['year'], $translations['years1'], $translations['years2']), true);
+            $text = UString::plural($diff->y, $translations['year'], true);
         } elseif ($diff->m >= 1) {
-            $text = UString::plural($diff->m, array($translations['month'], $translations['months1'], $translations['months2']), true);
+            $text = UString::plural($diff->m, $translations['month'], true);
         } elseif ($diff->d >= 7) {
-            $text = UString::plural(ceil($diff->d / 7), array($translations['week'], $translations['weeks1'], $translations['weeks2']), true);
+            $text = UString::plural(ceil($diff->d / 7), $translations['week'], true);
         } elseif ($diff->d >= 1) {
-            $text = UString::plural($diff->d, array($translations['day'], $translations['days1'], $translations['days2']), true);
+            $text = UString::plural($diff->d, $translations['day'], true);
         } elseif ($diff->h >= 1) {
-            $text = UString::plural($diff->h, array($translations['hour'], $translations['hours1'], $translations['hours2']), true);
+            $text = UString::plural($diff->h, $translations['hour'], true);
         } elseif ($diff->i >= 1) {
-            $text = UString::plural($diff->i, array($translations['minute'], $translations['minutes1'], $translations['minutes2']), true);
+            $text = UString::plural($diff->i, $translations['minute'], true);
         } elseif ($diff->s >= 1) {
-            $text = UString::plural($diff->s, array($translations['second'], $translations['seconds1'], $translations['seconds2']), true);
+            $text = UString::plural($diff->s, $translations['second'], true);
         } else {
-            $text = '0 ' . $translations['seconds2'];
+            $text = UString::plural(0, $translations['second'], true);
         }
 
         return trim($text) . ' ' . $translations['ago'];

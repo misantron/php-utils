@@ -450,12 +450,18 @@ class UArrayTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadTranslations()
     {
-        $result = self::callMethod('\\Utility\\UArray', 'loadTranslations');
-        $this->assertNotNull($result);
-        $this->assertInternalType('array', $result);
+        try {
+            static::callMethod('\\Utility\\UString', 'loadTranslations', array('someMethod'));
+            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+        } catch(InvalidArgumentException $e){
+            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
+            $this->assertEquals('Can not load translation for method.', $e->getMessage());
+        }
     }
 
     /**
+     * Call protected class methods using reflection
+     *
      * @param string $obj
      * @param string $name
      * @param array $args
