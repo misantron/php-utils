@@ -117,7 +117,8 @@ class UString extends UAbstract
         if($bytes > PHP_INT_MAX){
             throw new InvalidArgumentException('Bytes size exceeds PHP_INT_MAX.');
         }
-        $translations = array_values(static::loadTranslations(__FUNCTION__));
+        $translations = static::loadTranslations(__FUNCTION__);
+        $translations = array_values($translations);
         $factor = (int)floor((strlen($bytes) - 1) / 3);
         return round(($bytes / pow(1024, $factor)), $precision) . ' ' .  $translations[$factor];
     }

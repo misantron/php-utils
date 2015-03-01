@@ -135,10 +135,10 @@ class UStringTest extends \PHPUnit_Framework_TestCase
     public function testFileSize()
     {
         try {
-            UString::fileSize(PHP_INT_MAX + 4);
-            $this->setExpectedException('\\Utility\\Exception\\InvalidArgumentException');
+            $bytes = PHP_INT_MAX + 36;
+            UString::fileSize($bytes);
         } catch(InvalidArgumentException $e){
-            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
+            $this->assertInstanceOf('Utility\Exception\InvalidArgumentException', $e);
             $this->assertEquals('Bytes size exceeds PHP_INT_MAX.', $e->getMessage());
         }
 
