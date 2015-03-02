@@ -1,15 +1,15 @@
 {
   "name": "misantron/php-utils",
   "type": "library",
-  "description": "Collection of useful PHP utils.",
-  "version": "0.9.0",
+  "description": "A collection of PHP utility classes.",
+  "version": "1.0.0",
   "license": "MIT",
   "keywords": ["php", "utilities", "array", "string", "datetime"],
   "homepage": "https://github.com/misantron/php-utils",
 
   "authors": [
     {
-      "name": "Alexandr Ivanov",
+      "name": "Alexandr",
       "email": "misantron@gmail.com",
       "homepage": "https://github.com/misantron"
     }
