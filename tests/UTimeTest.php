@@ -3,6 +3,7 @@
 require_once 'TestCase.php';
 
 use Utility\Exception\InvalidArgumentException;
+use Utility\Exception\OutOfRangeException;
 use Utility\Exception\NonStaticCallException;
 use Utility\UTime;
 
@@ -23,27 +24,6 @@ class UTimeTest extends TestCase
 
     public function testTimeDiff()
     {
-        try {
-            UTime::timeDiff(true, '2015-02-01');
-            $this->fail('Expected exception not thrown');
-        } catch(InvalidArgumentException $e){
-            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
-        }
-
-        try {
-            UTime::timeDiff(true, false);
-            $this->fail('Expected exception not thrown');
-        } catch(InvalidArgumentException $e){
-            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
-        }
-
-        try {
-            UTime::timeDiff(1424380190, false);
-            $this->fail('Expected exception not thrown');
-        } catch(InvalidArgumentException $e){
-            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
-        }
-
         try {
             UTime::timeDiff('2015-03-04', '2015-02-01');
             $this->fail('Expected exception not thrown');
@@ -88,6 +68,36 @@ class UTimeTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
+    public function testSecondsDiff()
+    {
+        try {
+            UTime::secondsDiff('2014-11-13', '2015-02-15');
+            $this->fail('Expected exception not thrown');
+        } catch(OutOfRangeException $e){
+            $this->assertInstanceOf('\\Utility\\Exception\\OutOfRangeException', $e);
+        }
+
+        $result = UTime::secondsDiff(new \DateTime('2015-02-26 22:16:21'), new \DateTime('2015-02-26 22:16:37'));
+        $expected = 16;
+        $this->assertEquals($expected, $result);
+
+        $result = UTime::secondsDiff(1424380190, 1424380947);
+        $expected = 12 * 60 + 37;
+        $this->assertEquals($expected, $result);
+
+        $result = UTime::secondsDiff(new \DateTime('2015-02-26 13:05'), new \DateTime('2015-02-26 22:16'));
+        $expected = 9 * 60 * 60 + 11 * 60;
+        $this->assertEquals($expected, $result);
+
+        $result = UTime::secondsDiff(new \DateTime('2015-02-23'), new \DateTime('2015-02-26'));
+        $expected = 3 * 24 * 60 * 60;
+        $this->assertEquals($expected, $result);
+
+        $result = UTime::secondsDiff('2015-02-13', '2015-02-01');
+        $expected = 12 * 24 * 60 * 60;
+        $this->assertEquals(-$expected, $result);
+    }
+
     public function testLoadTranslations()
     {
         try {
@@ -102,5 +112,52 @@ class UTimeTest extends TestCase
         $this->assertNotNull($result);
         $this->assertInternalType('array', $result);
         $this->assertNotEmpty($result);
+    }
+
+    public function testPrepareArgs()
+    {
+        try {
+            static::callMethod('\\Utility\\UTime', 'prepareArgs', array(true, '2015-02-01'));
+            $this->fail('Expected exception not thrown');
+        } catch(InvalidArgumentException $e){
+            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
+        }
+
+        try {
+            static::callMethod('\\Utility\\UTime', 'prepareArgs', array(true, false));
+            $this->fail('Expected exception not thrown');
+        } catch(InvalidArgumentException $e){
+            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
+        }
+
+        try {
+            static::callMethod('\\Utility\\UTime', 'prepareArgs', array(1424380190, false));
+            $this->fail('Expected exception not thrown');
+        } catch(InvalidArgumentException $e){
+            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
+        }
+
+        $result = static::callMethod('\\Utility\\UTime', 'prepareArgs', array('2015-02-13', '2015-02-26'));
+        $expected = array(new \DateTime('2015-02-13'), new \DateTime('2015-02-26'));
+        $this->assertEquals($expected, $result);
+
+        $result = static::callMethod('\\Utility\\UTime', 'prepareArgs', array(1424380190, 1424808432));
+        $date1 = new \DateTime();
+        $date1->setTimestamp(1424380190);
+        $date2 = new \DateTime();
+        $date2->setTimestamp(1424808432);
+        $expected = array($date1, $date2);
+        $this->assertEquals($expected, $result);
+
+        $result = static::callMethod('\\Utility\\UTime', 'prepareArgs', array('2014-11-13', 1424380190));
+        $date1 = new \DateTime('2014-11-13');
+        $date2 = new \DateTime();
+        $date2->setTimestamp(1424380190);
+        $expected = array($date1, $date2);
+        $this->assertEquals($expected, $result);
+
+        $result = static::callMethod('\\Utility\\UTime', 'prepareArgs', array(new \DateTime('2015-02-26 13:05'), new \DateTime('2015-02-26 22:16')));
+        $expected = array(new \DateTime('2015-02-26 13:05'), new \DateTime('2015-02-26 22:16'));
+        $this->assertEquals($expected, $result);
     }
 }
