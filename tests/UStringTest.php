@@ -163,4 +163,32 @@ class UStringTest extends TestCase
         $this->assertNotNull($result);
         $this->assertInternalType('array', $result);
     }
+
+    public function testContains()
+    {
+        $haystack = 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque';
+        $needle = 'unde';
+        $result = UString::contains($haystack, $needle);
+        $this->assertTrue($result);
+
+        $haystack = 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque';
+        $needle = 'oMnis';
+        $result = UString::contains($haystack, $needle);
+        $this->assertTrue($result);
+
+        $haystack = 'Sed ut perspiciatis unde omnis iste natus Error sit voluptatem accusantium doloremque';
+        $needle = 'oMnis';
+        $result = UString::contains($haystack, $needle, true);
+        $this->assertFalse($result);
+
+        $haystack = 'Sed ut perspiciatis unde omnis iste natus Error sit voluptatem accusantium doloremque';
+        $needle = 'Error';
+        $result = UString::contains($haystack, $needle, true);
+        $this->assertTrue($result);
+
+        $haystack = 'Sed ut perspiciatis unde omnis iste natus Error sit voluptatem accusantium doloremque';
+        $needle = 'error';
+        $result = UString::contains($haystack, $needle, true);
+        $this->assertFalse($result);
+    }
 }

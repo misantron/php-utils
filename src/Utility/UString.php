@@ -24,7 +24,7 @@ class UString extends UAbstract
     public static function truncate($str, $length, $ending = '')
     {
         // @codeCoverageIgnoreStart
-        if(!extension_loaded('mbstring')){
+        if (!extension_loaded('mbstring')) {
             throw new ExtensionNotLoadedException('Mbstring extension is required for using this method.');
         }
         // @codeCoverageIgnoreEnd
@@ -46,7 +46,7 @@ class UString extends UAbstract
     public static function truncateWords($str, $count, $ending = '')
     {
         // @codeCoverageIgnoreStart
-        if(!extension_loaded('mbstring')){
+        if (!extension_loaded('mbstring')) {
             throw new ExtensionNotLoadedException('Mbstring extension is required for using this method.');
         }
         // @codeCoverageIgnoreEnd
@@ -70,10 +70,10 @@ class UString extends UAbstract
      */
     public static function plural($number, $forms, $withNumber = false)
     {
-        if(sizeof($forms) < 3){
+        if (sizeof($forms) < 3) {
             throw new InvalidArgumentException('Param $forms must contains three words.');
         }
-        $text = $number%10==1&&$number%100!=11?$forms[0]:($number%10>=2&&$number%10<=4&&($number%100<10||$number%100>=20)?$forms[1]:$forms[2]);
+        $text = $number % 10 == 1 && $number % 100 != 11 ? $forms[0] : ($number % 10 >= 2 && $number % 10 <= 4 && ($number % 100 < 10 || $number % 100 >= 20) ? $forms[1] : $forms[2]);
         return $withNumber ? $number . ' ' . $text : $text;
     }
 
@@ -86,10 +86,11 @@ class UString extends UAbstract
     public static function random($length = 10)
     {
         $randChars = array();
-        $alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $alphabetSize = strlen($alphabet);
-        while(--$length+1){
-            $randChars[] = $alphabet[mt_rand(0, $alphabetSize-1)];;
+        $chars = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charsLength = strlen($chars) - 1;
+        $length++;
+        while (--$length) {
+            $randChars[] = $chars[mt_rand(0, $charsLength)];
         }
         shuffle($randChars);
         return implode('', $randChars);
@@ -116,6 +117,18 @@ class UString extends UAbstract
         $translations = static::loadTranslations(__FUNCTION__);
         $translations = array_values($translations);
         $factor = (int)floor((strlen($bytes) - 1) / 3);
-        return round(($bytes / pow(1024, $factor)), $precision) . ' ' .  $translations[$factor];
+        return round(($bytes / pow(1024, $factor)), $precision) . ' ' . $translations[$factor];
+    }
+
+    /**
+     * @param string $haystack
+     * @param string $needle
+     * @param bool $caseSensitive
+     * @return bool
+     */
+    public static function contains($haystack, $needle, $caseSensitive = false)
+    {
+        $offset = $caseSensitive ? strpos($haystack, $needle) : stripos($haystack, $needle);
+        return $offset !== false;
     }
 }
