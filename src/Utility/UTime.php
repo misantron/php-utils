@@ -89,7 +89,7 @@ class UTime extends UAbstract
         // @codeCoverageIgnoreEnd
 
         if($diff->y > 0 || $diff->m > 0){
-            throw new OutOfRangeException('Date diff can not exceed one month.');
+            throw new OutOfRangeException('Date diff may not exceed one month.');
         }
 
         $seconds = 0;

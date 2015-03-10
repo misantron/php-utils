@@ -301,4 +301,28 @@ class UArray extends UAbstract
         $args[] = &$arr;
         call_user_func_array('array_multisort', $args);
     }
+
+    /**
+     * Get array first key.
+     *
+     * @param array $arr
+     * @return mixed
+     */
+    public static function firstKey(&$arr)
+    {
+        reset($arr);
+        return key($arr);
+    }
+
+    /**
+     * Get array last key.
+     *
+     * @param array $arr
+     * @return mixed
+     */
+    public static function lastKey(&$arr)
+    {
+        end($arr);
+        return key($arr);
+    }
 }

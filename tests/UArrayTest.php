@@ -442,6 +442,20 @@ class UArrayTest extends TestCase
         $this->assertEquals($expected, $array);
     }
 
+    public function testFirstKey()
+    {
+        $example = array('key1' => 45, 'red', 'flower', 5 => 'flatten', 'key3' => '45');
+        $result = UArray::firstKey($example);
+        $this->assertEquals('key1', $result);
+    }
+
+    public function testLastKey()
+    {
+        $example = array('key1' => 45, 'red', 'flower', 'key3' => '45', 5 => 'flatten',);
+        $result = UArray::lastKey($example);
+        $this->assertEquals(5, $result);
+    }
+
     public function testLoadTranslations()
     {
         try {
