@@ -101,7 +101,7 @@ class UTime extends UAbstract
             $seconds += $diff->h * 60 * 60;
         }
         if ($diff->i >= 1) {
-            $seconds += ($diff->i * 60);
+            $seconds += $diff->i * 60;
         }
         if ($diff->s >= 1) {
             $seconds += $diff->s;
