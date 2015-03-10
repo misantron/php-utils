@@ -5,6 +5,7 @@ namespace Utility;
 use Cocur\Slugify\Slugify;
 use Utility\Exception\ExtensionNotLoadedException;
 use Utility\Exception\InvalidArgumentException;
+use Utility\Exception\RuntimeException;
 
 class UString extends UAbstract
 {
@@ -25,7 +26,7 @@ class UString extends UAbstract
     {
         // @codeCoverageIgnoreStart
         if (!extension_loaded('mbstring')) {
-            throw new ExtensionNotLoadedException('Mbstring extension is required for using this method.');
+            throw new ExtensionNotLoadedException('mbstring PHP extension is not installed.');
         }
         // @codeCoverageIgnoreEnd
 
@@ -47,7 +48,7 @@ class UString extends UAbstract
     {
         // @codeCoverageIgnoreStart
         if (!extension_loaded('mbstring')) {
-            throw new ExtensionNotLoadedException('Mbstring extension is required for using this method.');
+            throw new ExtensionNotLoadedException('mbstring PHP extension is not installed.');
         }
         // @codeCoverageIgnoreEnd
 
@@ -81,19 +82,87 @@ class UString extends UAbstract
      * Generate random string.
      *
      * @param int $length
+     * @param bool $humanFriendly
      * @return string
      */
-    public static function random($length = 10)
+    public static function random($length = 16, $humanFriendly = false)
     {
         $randChars = array();
-        $chars = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        if($humanFriendly){
+            $chars = 'abdefghjkmnpqrstuvwxyz123456789ABDEFGHJKLMNPQRSTUVWXYZ';
+        } else {
+            $chars = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        }
         $charsLength = strlen($chars) - 1;
         $length++;
         while (--$length) {
             $randChars[] = $chars[mt_rand(0, $charsLength)];
         }
-        shuffle($randChars);
         return implode('', $randChars);
+    }
+
+    /**
+     * @param int $length
+     * @return string
+     *
+     * @throws ExtensionNotLoadedException
+     * @throws RuntimeException
+     */
+    public static function secureRandom($length = 16)
+    {
+        // @codeCoverageIgnoreStart
+        if(!extension_loaded('openssl')){
+            throw new ExtensionNotLoadedException('The OpenSSL PHP extension is not installed.');
+        }
+        // @codeCoverageIgnoreEnd
+
+        $bytes = openssl_random_pseudo_bytes($length, $cryptStrong);
+        // @codeCoverageIgnoreStart
+        if(static::byteLength($bytes) < $length || !$cryptStrong){
+            throw new RuntimeException('Unable to generate random bytes.');
+        }
+        $bytes = static::byteSubstr($bytes, 0, $length);
+        // @codeCoverageIgnoreEnd
+
+        return strtr(substr(base64_encode($bytes), 0, $length), '+/', '_-');
+    }
+
+    /**
+     * Return string byte length.
+     *
+     * @param string $str
+     * @return int
+     *
+     * @throws ExtensionNotLoadedException
+     */
+    public static function byteLength($str)
+    {
+        // @codeCoverageIgnoreStart
+        if (!extension_loaded('mbstring')) {
+            throw new ExtensionNotLoadedException('mbstring PHP extension is not installed.');
+        }
+        // @codeCoverageIgnoreEnd
+
+        return mb_strlen($str, '8bit');
+    }
+
+    /**
+     * @param string $bytes
+     * @param int $start
+     * @param int|null $length
+     * @return string
+     *
+     * @throws ExtensionNotLoadedException
+     */
+    public static function byteSubstr($bytes, $start = 0, $length = null)
+    {
+        // @codeCoverageIgnoreStart
+        if (!extension_loaded('mbstring')) {
+            throw new ExtensionNotLoadedException('mbstring PHP extension is not installed.');
+        }
+        // @codeCoverageIgnoreEnd
+
+        return mb_substr($bytes, $start, $length === null ? mb_strlen($bytes, '8bit') : $length, '8bit');
     }
 
     /**

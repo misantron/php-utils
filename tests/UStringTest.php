@@ -103,12 +103,62 @@ class UStringTest extends TestCase
     public function testRandom()
     {
         $string = UString::random();
-        $this->assertEquals(10, strlen($string));
-        $this->assertRegExp('/^[a-zA-Z0-9]{10}$/', $string);
+        $this->assertEquals(16, strlen($string));
+        $this->assertRegExp('/^[a-zA-Z0-9]{16}$/', $string);
 
-        $string = UString::random(17);
-        $this->assertEquals(17, strlen($string));
-        $this->assertRegExp('/^[a-zA-Z0-9]{17}$/', $string);
+        $string = UString::random(21);
+        $this->assertEquals(21, strlen($string));
+        $this->assertRegExp('/^[a-zA-Z0-9]{21}$/', $string);
+
+        $string = UString::random(12, true);
+        $this->assertEquals(12, strlen($string));
+        $this->assertRegExp('/^[abdefghjkmnpqrstuvwxyz123456789ABDEFGHJKLMNPQRSTUVWXYZ]{12}$/', $string);
+    }
+
+    public function testSecureRandom()
+    {
+        $result = UString::secureRandom();
+        $this->assertEquals(16, strlen($result));
+        $this->assertRegExp('/^[a-zA-Z0-9\-_]{16}$/', $result);
+
+        $result = UString::secureRandom(34);
+        $this->assertEquals(34, strlen($result));
+        $this->assertRegExp('/^[a-zA-Z0-9\-_]{34}$/', $result);
+    }
+
+    public function testByteLength()
+    {
+        $example = 'sfbfs%f472bss7842hdw7';
+        $result = UString::byteLength($example);
+        $this->assertEquals(mb_strlen($example, '8bit'), $result);
+
+        $example = 'аовырРА763та-?№то4оаы7ол427ал_';
+        $result = UString::byteLength($example);
+        $this->assertEquals(mb_strlen($example, '8bit'), $result);
+    }
+
+    public function testByteSubstr()
+    {
+        $example = 'sfbfs%f472bss7842hdw7';
+
+        $result = UString::byteSubstr($example);
+        $this->assertEquals(21, mb_strlen($result));
+        $this->assertEquals($example, $result);
+
+        $result = UString::byteSubstr($example, 2);
+        $this->assertEquals(19, mb_strlen($result));
+        $expected = 'bfs%f472bss7842hdw7';
+        $this->assertEquals($expected, $result);
+
+        $result = UString::byteSubstr($example, 0, 5);
+        $this->assertEquals(5, mb_strlen($result));
+        $expected = 'sfbfs';
+        $this->assertEquals($expected, $result);
+
+        $result = UString::byteSubstr($example, 4, 12);
+        $this->assertEquals(12, mb_strlen($result));
+        $expected = 's%f472bss784';
+        $this->assertEquals($expected, $result);
     }
 
     public function testSlugify()

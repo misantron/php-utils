@@ -23,6 +23,7 @@
   "require": {
     "php": ">=5.3.3",
     "ext-mbstring": "*",
+    "ext-openssl": "*",
     "cocur/slugify": "~1.0"
   },
   "require-dev": {
