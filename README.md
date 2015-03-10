@@ -15,7 +15,8 @@
 ## Server requirements
 
 - PHP version >= 5.3.3.
-- PHP mbstring extension.
+- mbstring PHP extension.
+- OpenSSL PHP extension.
 
 ## External dependencies
 
