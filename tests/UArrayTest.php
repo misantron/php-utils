@@ -451,9 +451,24 @@ class UArrayTest extends TestCase
 
     public function testLastKey()
     {
-        $example = array('key1' => 45, 'red', 'flower', 'key3' => '45', 5 => 'flatten',);
+        $example = array('key1' => 45, 'red', 'flower', 'key3' => '45', 5 => 'flatten');
         $result = UArray::lastKey($example);
         $this->assertEquals(5, $result);
+    }
+
+    public function testIsAssoc()
+    {
+        $example = array(45, 'red', 'flower',);
+        $result = UArray::isAssoc($example);
+        $this->assertFalse($result);
+
+        $example = array('key1' => 45, 'key3' => '45');
+        $result = UArray::isAssoc($example);
+        $this->assertTrue($result);
+
+        $example = array('key1' => 45, 'red', 'flower', 'key3' => '45', 5 => 'flatten',);
+        $result = UArray::isAssoc($example);
+        $this->assertTrue($result);
     }
 
     public function testLoadTranslations()

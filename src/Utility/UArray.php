@@ -325,4 +325,15 @@ class UArray extends UAbstract
         end($arr);
         return key($arr);
     }
+
+    /**
+     * Check whether an array is associative or not
+     *
+     * @param array $arr
+     * @return bool
+     */
+    public static function isAssoc(&$arr)
+    {
+        return (bool)sizeof(array_filter(array_keys($arr), 'is_string'));
+    }
 }
