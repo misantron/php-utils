@@ -285,15 +285,15 @@ class UArray extends UAbstract
         if (empty($keys) || empty($arr)) {
             throw new InvalidArgumentException('Params $arr or $key is invalid for sorting.');
         }
-        $n = sizeof($keys);
+        $keysCount = sizeof($keys);
         if (is_scalar($direction)) {
-            $direction = array_fill(0, $n, $direction);
-        } elseif (sizeof($direction) !== $n) {
+            $direction = array_fill(0, $keysCount, $direction);
+        } elseif (sizeof($direction) !== $keysCount) {
             throw new InvalidArgumentException('The length of $direction and $keys params must be equal.');
         }
         if (is_scalar($sortFlag)) {
-            $sortFlag = array_fill(0, $n, $sortFlag);
-        } elseif (sizeof($sortFlag) !== $n) {
+            $sortFlag = array_fill(0, $keysCount, $sortFlag);
+        } elseif (sizeof($sortFlag) !== $keysCount) {
             throw new InvalidArgumentException('The length of $sortFlag and $keys params must be equal.');
         }
         $args = array();
