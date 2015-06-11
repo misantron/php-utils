@@ -39,20 +39,29 @@ or add
 
 to the require section of your composer.json.
 
-## Simple usage example
+## Basic usage examples
 
 ```php
-use Utility\UArray;
+use Utility\UArray;  
+use Utility\UString;  
+use Utility\UTime;
 
 $array = array(
     array('name' => 'Alex', 'age' => 25),
     array('name' => 'Sara', 'age' => 21),
     array('name' => 'John', 'age' => 28)
-);
+);  
+$string = '..C’est du français !';  
+$date1 = new \DateTime('2015-02-26 13:05');  
+$date2 = new \DateTime('2015-02-26 22:16');  
 
-$result = UArray::extractColumn($array, 'age');
+$result1 = UArray::extractColumn($array, 'age');  
+$result2 = UString::slugify($string);  
+$result3 = UTime::secondsDiff($date1, $date2);
 
-var_dump($result);
+var_dump($result1, $result2, $result3);
 
-array(25, 21, 28);
+array(25, 21, 28);  
+'c-est-du-francais';  
+33060;
 ```
