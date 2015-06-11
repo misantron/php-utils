@@ -1,7 +1,6 @@
 .idea
-vendor/
+vendor/*
+build/*
 
 composer.phar
 composer.lock
-
-
