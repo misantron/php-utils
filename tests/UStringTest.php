@@ -1,11 +1,15 @@
 <?php
 
-require_once 'TestCase.php';
+namespace Utility\Tests;
 
 use Utility\Exception\NonStaticCallException;
 use Utility\Exception\InvalidArgumentException;
 use Utility\UString;
 
+/**
+ * Class UStringTest
+ * @package Utility\Tests
+ */
 class UStringTest extends TestCase
 {
     public function testConstructor()

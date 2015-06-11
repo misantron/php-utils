@@ -2,6 +2,10 @@
 
 namespace Utility\Translation;
 
+/**
+ * Class UTimeTranslation
+ * @package Utility\Translation
+ */
 class UTimeTranslation extends UAbstractTranslation
 {
     protected static $dictionary = array(

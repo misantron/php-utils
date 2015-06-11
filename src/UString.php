@@ -7,6 +7,10 @@ use Utility\Exception\ExtensionNotLoadedException;
 use Utility\Exception\InvalidArgumentException;
 use Utility\Exception\RuntimeException;
 
+/**
+ * Class UString
+ * @package Utility
+ */
 class UString extends UAbstract
 {
     /** @var string */

@@ -1,11 +1,15 @@
 <?php
 
-require_once 'TestCase.php';
+namespace Utility\Tests;
 
 use Utility\Exception\InvalidArgumentException;
 use Utility\Exception\NonStaticCallException;
 use Utility\UArray;
 
+/**
+ * Class UArrayTest
+ * @package Utility\Tests
+ */
 class UArrayTest extends TestCase
 {
     public function testConstructor()

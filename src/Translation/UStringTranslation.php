@@ -2,6 +2,10 @@
 
 namespace Utility\Translation;
 
+/**
+ * Class UStringTranslation
+ * @package Utility\Translation
+ */
 class UStringTranslation extends UAbstractTranslation
 {
     protected static $dictionary = array(

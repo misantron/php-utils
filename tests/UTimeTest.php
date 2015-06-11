@@ -1,6 +1,6 @@
 <?php
 
-require_once 'TestCase.php';
+namespace Utility\Tests;
 
 use Utility\Exception\InvalidArgumentException;
 use Utility\Exception\OutOfRangeException;
@@ -9,6 +9,10 @@ use Utility\UTime;
 
 date_default_timezone_set('UTC');
 
+/**
+ * Class UTimeTest
+ * @package Utility\Tests
+ */
 class UTimeTest extends TestCase
 {
     public function testConstructor()

@@ -6,6 +6,10 @@ use Utility\Exception\InvalidArgumentException;
 use Utility\Exception\NonStaticCallException;
 use Utility\Translation\UAbstractTranslation;
 
+/**
+ * Class UAbstract
+ * @package Utility
+ */
 class UAbstract
 {
     /**
@@ -28,7 +32,7 @@ class UAbstract
         /** @var UAbstractTranslation $className */
         $className = str_replace('Utility', 'Utility\\Translation', get_called_class()) . 'Translation';
         $dictionary = $className::load($method);
-        if($dictionary === null){
+        if ($dictionary === null) {
             throw new InvalidArgumentException('Can not load translation for method.');
         }
         return $dictionary;

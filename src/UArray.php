@@ -4,6 +4,10 @@ namespace Utility;
 
 use Utility\Exception\InvalidArgumentException;
 
+/**
+ * Class UArray
+ * @package Utility
+ */
 class UArray extends UAbstract
 {
     const
@@ -24,7 +28,7 @@ class UArray extends UAbstract
     public static function get(&$arr, $key, $default = null)
     {
         $value = null;
-        if(is_array($arr) && isset($arr[$key])){
+        if (is_array($arr) && isset($arr[$key])) {
             $value = $arr[$key];
         } else {
             if(func_num_args() < 3){
@@ -117,7 +121,7 @@ class UArray extends UAbstract
             default:
                 $callback = null;
         }
-        if($callback){
+        if ($callback) {
             $filtered = array_filter($arr, $callback);
             $result = $preserveKeys ? $filtered : array_values($filtered);
         } else {
@@ -153,13 +157,13 @@ class UArray extends UAbstract
      */
     public static function insertBefore(&$arr, $needleKey, $element, $withKey = null)
     {
-        if(!is_array($element)){
+        if (!is_array($element)) {
             $element = array(($withKey ? $withKey : 0) => $element);
-        } elseif($withKey) {
+        } elseif ($withKey) {
             $element = array($withKey => reset($element));
         }
         $offset = self::searchKey($arr, $needleKey);
-        if($offset === false){
+        if ($offset === false) {
             throw new InvalidArgumentException('Element with key "' . $needleKey . '" not found.');
         }
         return array_merge(
@@ -181,7 +185,7 @@ class UArray extends UAbstract
      */
     public static function insertAfter(&$arr, $needleKey, $element, $withKey = null)
     {
-        if(!is_array($element)){
+        if (!is_array($element)) {
             $element = array(($withKey ? $withKey : 0) => $element);
         } elseif($withKey) {
             $element = array($withKey => reset($element));
@@ -257,7 +261,7 @@ class UArray extends UAbstract
     {
         $result = array();
         foreach ($arr as $val) {
-            if(!isset($val[$keyColumn]) || ($valColumn !== null && !isset($val[$valColumn]))){
+            if (!isset($val[$keyColumn]) || ($valColumn !== null && !isset($val[$valColumn]))) {
                 break;
             }
             $result[$val[$keyColumn]] = $valColumn === null ? $val : $val[$valColumn];

@@ -6,6 +6,10 @@ use Utility\Exception\InvalidArgumentException;
 use Utility\Exception\OutOfRangeException;
 use Utility\Exception\RuntimeException;
 
+/**
+ * Class UTime
+ * @package Utility
+ */
 class UTime extends UAbstract
 {
     /**

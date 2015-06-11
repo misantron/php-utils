@@ -1,16 +1,22 @@
 <?php
 
+namespace Utility\Tests;
+
+/**
+ * Class TestCase
+ * @package Utility\Tests
+ */
 class TestCase extends \PHPUnit_Framework_TestCase
 {
-    public function setup()
-    {
-        parent::setUp();
-
-        $vendorAutoloadPath = dirname(__FILE__) . '/../vendor/autoload.php';
-        if (file_exists($vendorAutoloadPath)) {
-            require_once $vendorAutoloadPath;
-        }
-    }
+//    public function setup()
+//    {
+//        parent::setUp();
+//
+//        $vendorAutoloadPath = dirname(__FILE__) . '/../vendor/autoload.php';
+//        if (file_exists($vendorAutoloadPath)) {
+//            require_once $vendorAutoloadPath;
+//        }
+//    }
 
     /**
      * Call protected class method using reflection

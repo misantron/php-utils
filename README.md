@@ -7,28 +7,37 @@
 
 ## Features
 
-- Contains Array, String and Time utilities.
+- Contains Array, String and Time helper utilities.
 - Work with PHP version >= 5.3.3 (HHVM is not tested)
 - Base encoding - UTF-8
-- PSR-0 auto loading standard compatible.
+- PSR-4 auto loading standard compatible.
 
 ## Server requirements
 
 - PHP version >= 5.3.3.
-- mbstring PHP extension.
+- MBString PHP extension.
 - OpenSSL PHP extension.
 
 ## External dependencies
 
 - [Slugify](https://github.com/cocur/slugify) library
 
-## Installation
+## Installing
 
-You can install library through [Composer](https://getcomposer.org):
+The preferred way to install is through [Composer](https://getcomposer.org).
+Run this command to install the latest stable version:
 
 ```shell
 $ composer require misantron/php-utils
 ```
+
+or add
+
+```json
+"misantron/php-utils": "~1.0"
+```
+
+to the require section of your composer.json.
 
 ## Simple usage example
 

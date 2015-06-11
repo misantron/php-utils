@@ -2,6 +2,10 @@
 
 namespace Utility\Translation;
 
+/**
+ * Class UAbstractTranslation
+ * @package Utility\Translation
+ */
 class UAbstractTranslation
 {
     protected static $dictionary = array();
