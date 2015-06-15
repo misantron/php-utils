@@ -165,18 +165,18 @@ class UStringTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testSlugify()
+    public function testSlug()
     {
         $expected = 'hello-world';
-        $result = UString::slugify('Hello World');
+        $result = UString::slug('Hello World');
         $this->assertEquals($expected, $result);
 
         $expected = 'privet-mir';
-        $result = UString::slugify('Привет мир');
+        $result = UString::slug('Привет мир');
         $this->assertEquals($expected, $result);
 
         $expected = 'c-est-du-francais';
-        $result = UString::slugify('..C’est du français !');
+        $result = UString::slug('..C’est du français !');
         $this->assertEquals($expected, $result);
     }
 

@@ -57,7 +57,7 @@ $date1 = new \DateTime('2015-02-26 13:05');
 $date2 = new \DateTime('2015-02-26 22:16');  
 
 $result1 = UArray::extractColumn($array, 'age');  
-$result2 = UString::slugify($string);  
+$result2 = UString::slug($string);  
 $result3 = UTime::secondsDiff($date1, $date2);
 
 var_dump($result1, $result2, $result3);

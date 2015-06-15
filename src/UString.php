@@ -9,19 +9,29 @@ use Utility\Exception\RuntimeException;
 
 /**
  * Class UString
- * @package Utility
+ *
+ * @category Utility
+ * @package  Utility
+ * @author   Alexandr Ivanov <misantron@gmail.com>
+ * @license  MIT https://github.com/misantron/php-utils/blob/master/LICENSE
+ * @link     https://github.com/misantron/php-utils/blob/master/src/UTime.php
  */
 class UString extends UAbstract
 {
-    /** @var string */
+    /**
+     * Base string encoding
+     *
+     * @var string
+     */
     protected static $encoding = 'UTF-8';
 
     /**
      * Truncate string to given length.
      *
      * @param string $str
-     * @param int $length
+     * @param int    $length
      * @param string $ending
+     *
      * @return string
      *
      * @throws ExtensionNotLoadedException
@@ -42,8 +52,9 @@ class UString extends UAbstract
      * Truncate string to given word count.
      *
      * @param string $str
-     * @param int $count
+     * @param int    $count
      * @param string $ending
+     *
      * @return string
      *
      * @throws ExtensionNotLoadedException
@@ -66,9 +77,10 @@ class UString extends UAbstract
     /**
      * Return right word form for given number.
      *
-     * @param int $number
+     * @param int   $number
      * @param array $forms
-     * @param bool $withNumber
+     * @param bool  $withNumber
+     *
      * @return string
      *
      * @throws InvalidArgumentException
@@ -85,14 +97,15 @@ class UString extends UAbstract
     /**
      * Generate random string.
      *
-     * @param int $length
+     * @param int  $length
      * @param bool $humanFriendly
+     *
      * @return string
      */
     public static function random($length = 16, $humanFriendly = false)
     {
         $randChars = array();
-        if($humanFriendly){
+        if ($humanFriendly) {
             $chars = 'abdefghjkmnpqrstuvwxyz123456789ABDEFGHJKLMNPQRSTUVWXYZ';
         } else {
             $chars = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -106,7 +119,10 @@ class UString extends UAbstract
     }
 
     /**
+     * Generate string based on pseudo-random bytes sequence.
+     *
      * @param int $length
+     *
      * @return string
      *
      * @throws ExtensionNotLoadedException
@@ -115,14 +131,14 @@ class UString extends UAbstract
     public static function secureRandom($length = 16)
     {
         // @codeCoverageIgnoreStart
-        if(!extension_loaded('openssl')){
+        if (!extension_loaded('openssl')) {
             throw new ExtensionNotLoadedException('The OpenSSL PHP extension is not installed.');
         }
         // @codeCoverageIgnoreEnd
 
         $bytes = openssl_random_pseudo_bytes($length, $cryptStrong);
         // @codeCoverageIgnoreStart
-        if(static::byteLength($bytes) < $length || !$cryptStrong){
+        if (static::byteLength($bytes) < $length || !$cryptStrong) {
             throw new RuntimeException('Unable to generate random bytes.');
         }
         $bytes = static::byteSubstr($bytes, 0, $length);
@@ -132,9 +148,10 @@ class UString extends UAbstract
     }
 
     /**
-     * Return string byte length.
+     * Return byte length of string.
      *
      * @param string $str
+     *
      * @return int
      *
      * @throws ExtensionNotLoadedException
@@ -151,9 +168,12 @@ class UString extends UAbstract
     }
 
     /**
-     * @param string $bytes
-     * @param int $start
+     * Return substring from byte sequence string.
+     *
+     * @param string   $bytes
+     * @param int      $start
      * @param int|null $length
+     *
      * @return string
      *
      * @throws ExtensionNotLoadedException
@@ -173,16 +193,20 @@ class UString extends UAbstract
      * Return slug for given string.
      *
      * @param string $str
+     *
      * @return string
      */
-    public static function slugify($str)
+    public static function slug($str)
     {
         return Slugify::create()->slugify($str);
     }
 
     /**
+     * Get file size in human-readable format.
+     *
      * @param int $bytes
      * @param int $precision
+     *
      * @return string
      */
     public static function fileSize($bytes, $precision = 2)
@@ -194,9 +218,12 @@ class UString extends UAbstract
     }
 
     /**
+     * Check whether a substring contains in string or not.
+     *
      * @param string $haystack
      * @param string $needle
-     * @param bool $caseSensitive
+     * @param bool   $caseSensitive
+     *
      * @return bool
      */
     public static function contains($haystack, $needle, $caseSensitive = false)

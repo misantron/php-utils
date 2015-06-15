@@ -18,7 +18,7 @@ use Utility\Exception\RuntimeException;
 class UTime extends UAbstract
 {
     /**
-     * Get time diff in human-readable format
+     * Get time diff in human-readable format.
      *
      * @param mixed $from
      * @param mixed $to
@@ -75,7 +75,7 @@ class UTime extends UAbstract
     }
 
     /**
-     * Return seconds difference between two dates
+     * Return seconds difference between two dates.
      *
      * @param mixed $periodStartDate
      * @param mixed $periodEndDate
@@ -126,7 +126,7 @@ class UTime extends UAbstract
     }
 
     /**
-     * Convert date-like arguments to DateTime objects
+     * Convert date-like arguments to DateTime objects.
      *
      * @param mixed $firstArg
      * @param mixed $secondArg

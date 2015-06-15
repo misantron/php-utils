@@ -8,7 +8,12 @@ use Utility\Translation\UAbstractTranslation;
 
 /**
  * Class UAbstract
- * @package Utility
+ *
+ * @category Utility
+ * @package  Utility
+ * @author   Alexandr Ivanov <misantron@gmail.com>
+ * @license  MIT https://github.com/misantron/php-utils/blob/master/LICENSE
+ * @link     https://github.com/misantron/php-utils/blob/master/src/UTime.php
  */
 class UAbstract
 {
@@ -21,15 +26,21 @@ class UAbstract
     }
 
     /**
-     * @codeCoverageIgnore
+     * Load translations array.
+     *
      * @param string $method
+     *
      * @return array
      *
      * @throws InvalidArgumentException
+     *
+     * @codeCoverageIgnore
      */
     protected static function loadTranslations($method)
     {
-        /** @var UAbstractTranslation $className */
+        /**
+         * @var UAbstractTranslation $className
+         */
         $className = str_replace('Utility', 'Utility\\Translation', get_called_class()) . 'Translation';
         $dictionary = $className::load($method);
         if ($dictionary === null) {
