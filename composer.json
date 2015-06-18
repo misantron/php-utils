@@ -22,7 +22,7 @@
   },
 
   "require": {
-    "php": ">=5.3.3",
+    "php": ">=5.4",
     "ext-mbstring": "*",
     "ext-openssl": "*",
     "cocur/slugify": "~1.0"

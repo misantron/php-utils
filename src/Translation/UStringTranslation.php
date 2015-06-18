@@ -18,8 +18,8 @@ class UStringTranslation extends UAbstractTranslation
      *
      * @var array
      */
-    protected static $dictionary = array(
-        'fileSize' => array(
+    protected static $dictionary = [
+        'fileSize' => [
             'b' => 'б',
             'kb' => 'Кб',
             'mb' => 'Мб',
@@ -27,6 +27,6 @@ class UStringTranslation extends UAbstractTranslation
             'tb' => 'Тб',
             'pb' => 'Пб',
             'eb' => 'Eб',
-        ),
-    );
+        ],
+    ];
 }

@@ -56,7 +56,7 @@ class UArray extends UAbstract
      */
     public static function extractColumn(&$arr, $columnKey, $preserveKeys = false)
     {
-        $result = array();
+        $result = [];
         foreach ($arr as $key => $val) {
             if (!isset($val[$columnKey])) {
                 break;
@@ -77,7 +77,7 @@ class UArray extends UAbstract
      */
     public static function wrapKeys(&$arr, $prefix = null, $postfix = null)
     {
-        $result = array();
+        $result = [];
         $prefix = (string)$prefix;
         $postfix = (string)$postfix;
         foreach ($arr as $key => $val) {
@@ -97,7 +97,7 @@ class UArray extends UAbstract
      */
     public static function wrapValues(&$arr, $prefix = null, $postfix = null)
     {
-        $result = array();
+        $result = [];
         array_walk($arr, function($item, $key) use (&$result, $prefix, $postfix) {
             $result[$key] = (string)$prefix . (string)$item . (string)$postfix;
         });
@@ -164,9 +164,9 @@ class UArray extends UAbstract
     public static function insertBefore(&$arr, $needleKey, $element, $withKey = null)
     {
         if (!is_array($element)) {
-            $element = array(($withKey ? $withKey : 0) => $element);
+            $element = [($withKey ? $withKey : 0) => $element];
         } elseif ($withKey) {
-            $element = array($withKey => reset($element));
+            $element = [$withKey => reset($element)];
         }
         $offset = static::searchKey($arr, $needleKey);
         if ($offset === false) {
@@ -192,9 +192,9 @@ class UArray extends UAbstract
     public static function insertAfter(&$arr, $needleKey, $element, $withKey = null)
     {
         if (!is_array($element)) {
-            $element = array(($withKey ? $withKey : 0) => $element);
+            $element = [($withKey ? $withKey : 0) => $element];
         } elseif($withKey) {
-            $element = array($withKey => reset($element));
+            $element = [$withKey => reset($element)];
         }
         $size = sizeof($arr);
         $offset = static::searchKey($arr, $needleKey);
@@ -247,7 +247,7 @@ class UArray extends UAbstract
      */
     public static function flatten(&$arr)
     {
-        $result = array();
+        $result = [];
         array_walk_recursive($arr, function ($a) use (&$result) {
             $result[] = $a;
         });
@@ -265,7 +265,7 @@ class UArray extends UAbstract
      */
     public static function map(&$arr, $keyColumn, $valColumn = null)
     {
-        $result = array();
+        $result = [];
         foreach ($arr as $val) {
             if (!isset($val[$keyColumn]) || ($valColumn !== null && !isset($val[$valColumn]))) {
                 break;
@@ -287,7 +287,7 @@ class UArray extends UAbstract
      */
     public static function multisort(&$arr, $key, $direction = SORT_ASC, $sortFlag = SORT_REGULAR)
     {
-        $keys = is_array($key) ? $key : array($key);
+        $keys = is_array($key) ? $key : [$key];
         if (empty($keys) || empty($arr)) {
             throw new InvalidArgumentException('Params $arr or $key is invalid for sorting.');
         }
@@ -302,7 +302,7 @@ class UArray extends UAbstract
         } elseif (sizeof($sortFlag) !== $keysCount) {
             throw new InvalidArgumentException('The length of $sortFlag and $keys params must be equal.');
         }
-        $args = array();
+        $args = [];
         foreach ($keys as $i => $key) {
             $args[] = static::extractColumn($arr, $key);
             $args[] = $direction[$i];

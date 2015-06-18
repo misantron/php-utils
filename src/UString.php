@@ -104,7 +104,7 @@ class UString extends UAbstract
      */
     public static function random($length = 16, $humanFriendly = false)
     {
-        $randChars = array();
+        $randChars = [];
         if ($humanFriendly) {
             $chars = 'abdefghjkmnpqrstuvwxyz123456789ABDEFGHJKLMNPQRSTUVWXYZ';
         } else {

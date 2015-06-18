@@ -18,8 +18,8 @@ class UTimeTranslation extends UAbstractTranslation
      *
      * @var array
      */
-    protected static $dictionary = array(
-        'timeDiff' => array(
+    protected static $dictionary = [
+        'timeDiff' => [
             'ago' => 'назад',
             'second' => array('секунда', 'секунды', 'секунд'),
             'minute' => array('минута', 'минуты', 'минут'),
@@ -28,6 +28,6 @@ class UTimeTranslation extends UAbstractTranslation
             'week' => array('неделя', 'недели', 'недель'),
             'month' => array('месяц', 'месяца', 'месяцев'),
             'year' => array('год', 'года', 'лет'),
-        ),
-    );
+        ],
+    ];
 }

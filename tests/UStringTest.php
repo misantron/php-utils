@@ -76,30 +76,30 @@ class UStringTest extends TestCase
     public function testPlural()
     {
         try {
-            UString::plural(12, array('страница', 'страниц'));
+            UString::plural(12, ['страница', 'страниц']);
             $this->fail('Expected exception not thrown');
         } catch(InvalidArgumentException $e){
             $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
             $this->assertEquals('Param $forms must contains three words.', $e->getMessage());
         }
 
-        $result = UString::plural(5, array('машина', 'машины', 'машин'));
+        $result = UString::plural(5, ['машина', 'машины', 'машин']);
         $expected = 'машин';
         $this->assertEquals($expected, $result);
 
-        $result = UString::plural(2, array('машина', 'машины', 'машин'));
+        $result = UString::plural(2, ['машина', 'машины', 'машин']);
         $expected = 'машины';
         $this->assertEquals($expected, $result);
 
-        $result = UString::plural(1, array('машина', 'машины', 'машин'), true);
+        $result = UString::plural(1, ['машина', 'машины', 'машин'], true);
         $expected = '1 машина';
         $this->assertEquals($expected, $result);
 
-        $result = UString::plural(34, array('содат', 'солдата', 'солдат'));
+        $result = UString::plural(34, ['содат', 'солдата', 'солдат']);
         $expected = 'солдата';
         $this->assertEquals($expected, $result);
 
-        $result = UString::plural(178, array('содат', 'солдата', 'солдат'), true);
+        $result = UString::plural(178, ['содат', 'солдата', 'солдат'], true);
         $expected = '178 солдат';
         $this->assertEquals($expected, $result);
     }
@@ -203,21 +203,6 @@ class UStringTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testLoadTranslations()
-    {
-        try {
-            static::callMethod('\\Utility\\UString', 'loadTranslations', array('fileSize1'));
-            $this->fail('Expected exception not thrown');
-        } catch(InvalidArgumentException $e){
-            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
-            $this->assertEquals('Can not load translation for method.', $e->getMessage());
-        }
-
-        $result = static::callMethod('\\Utility\\UString', 'loadTranslations', array('fileSize'));
-        $this->assertNotNull($result);
-        $this->assertInternalType('array', $result);
-    }
-
     public function testContains()
     {
         $haystack = 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque';
@@ -244,5 +229,20 @@ class UStringTest extends TestCase
         $needle = 'error';
         $result = UString::contains($haystack, $needle, true);
         $this->assertFalse($result);
+    }
+
+    public function testLoadTranslations()
+    {
+        try {
+            static::callMethod('\\Utility\\UString', 'loadTranslations', ['fileSize1']);
+            $this->fail('Expected exception not thrown');
+        } catch(InvalidArgumentException $e){
+            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
+            $this->assertEquals('Can not load translation for method.', $e->getMessage());
+        }
+
+        $result = static::callMethod('\\Utility\\UString', 'loadTranslations', ['fileSize']);
+        $this->assertNotNull($result);
+        $this->assertInternalType('array', $result);
     }
 }

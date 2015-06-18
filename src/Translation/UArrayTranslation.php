@@ -18,7 +18,5 @@ class UArrayTranslation extends UAbstractTranslation
      *
      * @var array
      */
-    protected static $dictionary = array(
-
-    );
+    protected static $dictionary = [];
 }

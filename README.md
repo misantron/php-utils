@@ -9,13 +9,12 @@
 ## Features
 
 - Contains Array, String and Time helper utilities.
-- Work with PHP version >= 5.3.3 (HHVM is not tested)
 - Base encoding - UTF-8
 - PSR-4 auto loading standard compatible.
 
 ## Server requirements
 
-- PHP version >= 5.3.3.
+- PHP version >= 5.4.
 - MBString PHP extension.
 - OpenSSL PHP extension.
 
@@ -35,7 +34,7 @@ $ composer require misantron/php-utils
 or add
 
 ```json
-"misantron/php-utils": "~1.0"
+"misantron/php-utils": "dev-master"
 ```
 
 to the require section of your composer.json.
@@ -47,11 +46,11 @@ use Utility\UArray;
 use Utility\UString;  
 use Utility\UTime;
 
-$array = array(
-    array('name' => 'Alex', 'age' => 25),
-    array('name' => 'Sara', 'age' => 21),
-    array('name' => 'John', 'age' => 28)
-);  
+$array = [  
+    ['name' => 'Alex', 'age' => 25],  
+    ['name' => 'Sara', 'age' => 21],  
+    ['name' => 'John', 'age' => 28]  
+];  
 $string = '..C’est du français !';  
 $date1 = new \DateTime('2015-02-26 13:05');  
 $date2 = new \DateTime('2015-02-26 22:16');  
@@ -62,7 +61,7 @@ $result3 = UTime::secondsDiff($date1, $date2);
 
 var_dump($result1, $result2, $result3);
 
-array(25, 21, 28);  
+[25, 21, 28];  
 'c-est-du-francais';  
 33060;
 ```

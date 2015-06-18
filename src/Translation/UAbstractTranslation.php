@@ -18,7 +18,7 @@ class UAbstractTranslation
      *
      * @var array
      */
-    protected static $dictionary = array();
+    protected static $dictionary = [];
 
     /**
      * Get translation by key.

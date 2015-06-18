@@ -25,7 +25,7 @@ class UArrayTest extends TestCase
 
     public function testGet()
     {
-        $array = array();
+        $array = [];
 
         try {
             UArray::get($array, 'key');
@@ -38,37 +38,37 @@ class UArrayTest extends TestCase
         $result = UArray::get($array, 'key', 'default');
         $this->assertEquals('default', $result);
 
-        $array = array('key1' => 1, 'key2' => 2);
+        $array = ['key1' => 1, 'key2' => 2];
         $result = UArray::get($array, 'key1', 'default');
         $this->assertEquals(1, $result);
     }
 
     public function testExtractColumn()
     {
-        $array = array(
-            10 => array('key1' => 1, 'key2' => 2),
-            20 => array('key1' => 3, 'key2' => 4),
-        );
+        $array = [
+            10 => ['key1' => 1, 'key2' => 2],
+            20 => ['key1' => 3, 'key2' => 4],
+        ];
 
         $result = UArray::extractColumn($array, 'key3');
-        $expected = array();
+        $expected = [];
         $this->assertEquals($expected, $result);
 
         $result = UArray::extractColumn($array, 'key1', true);
-        $expected = array(10 => 1, 20 => 3);
+        $expected = [10 => 1, 20 => 3];
         $this->assertEquals($expected, $result);
 
         $result = UArray::extractColumn($array, 'key1', false);
-        $expected = array(0 => 1, 1 => 3);
+        $expected = [0 => 1, 1 => 3];
         $this->assertEquals($expected, $result);
     }
 
     public function testWrapKeys()
     {
-        $array = array(
+        $array = [
             'key1' => 1,
-            'key2' => 2,
-        );
+            'key2' => 2
+        ];
 
         $result = UArray::wrapKeys($array);
         $this->assertEquals($array, $result);
@@ -77,98 +77,98 @@ class UArrayTest extends TestCase
         $this->assertArrayHasKey('prefix:key1', $result);
         $this->assertArrayHasKey('prefix:key2', $result);
 
-        $expected = array(
+        $expected = [
             'prefix:key1' => 1,
             'prefix:key2' => 2,
-        );
+        ];
         $this->assertEquals($expected, $result);
 
         $result = UArray::wrapKeys($array, false, ':postfix');
         $this->assertArrayHasKey('key1:postfix', $result);
         $this->assertArrayHasKey('key2:postfix', $result);
 
-        $expected = array(
+        $expected = [
             'key1:postfix' => 1,
             'key2:postfix' => 2,
-        );
+        ];
         $this->assertEquals($expected, $result);
 
         $result = UArray::wrapKeys($array, 'prefix:', ':postfix');
         $this->assertArrayHasKey('prefix:key1:postfix', $result);
         $this->assertArrayHasKey('prefix:key2:postfix', $result);
 
-        $expected = array(
+        $expected = [
             'prefix:key1:postfix' => 1,
             'prefix:key2:postfix' => 2,
-        );
+        ];
         $this->assertEquals($expected, $result);
     }
 
     public function testWrapValues()
     {
-        $array = array(
+        $array = [
             'key1' => '1',
             'key2' => '2',
-        );
+        ];
 
         $result = UArray::wrapValues($array);
         $this->assertEquals($array, $result);
 
         $result = UArray::wrapValues($array, 'prefix:');
-        $expected = array(
+        $expected = [
             'key1' => 'prefix:1',
             'key2' => 'prefix:2',
-        );
+        ];
         $this->assertEquals($expected, $result);
 
         $result = UArray::wrapValues($array, false, ':postfix');
-        $expected = array(
+        $expected = [
             'key1' => '1:postfix',
             'key2' => '2:postfix',
-        );
+        ];
         $this->assertEquals($expected, $result);
 
         $result = UArray::wrapValues($array, 'prefix:', ':postfix');
-        $expected = array(
+        $expected = [
             'key1' => 'prefix:1:postfix',
             'key2' => 'prefix:2:postfix',
-        );
+        ];
         $this->assertEquals($expected, $result);
     }
 
     public function testFilterValues()
     {
-        $array = array(1, 3, 'val1', 'val2', 7, 14, 'val3', null, false);
+        $array = [1, 3, 'val1', 'val2', 7, 14, 'val3', null, false];
 
         $result = UArray::filterValues($array, 'abc');
-        $expected = array(1, 3, 'val1', 'val2', 7, 14, 'val3');
+        $expected = [1, 3, 'val1', 'val2', 7, 14, 'val3'];
         $this->assertEquals($expected, $result);
 
         $result = UArray::filterValues($array, UArray::TYPE_INTEGER, true);
-        $expected = array(0 => 1, 1 => 3, 4 => 7, 5 => 14);
+        $expected = [0 => 1, 1 => 3, 4 => 7, 5 => 14];
         $this->assertEquals($expected, $result);
 
         $result = UArray::filterValues($array, UArray::TYPE_INTEGER, false);
-        $expected = array(1, 3, 7, 14);
+        $expected = [1, 3, 7, 14];
         $this->assertEquals($expected, $result);
 
         $result = UArray::filterValues($array, UArray::TYPE_STRING, true);
-        $expected = array(2 => 'val1', 3 => 'val2', 6 => 'val3');
+        $expected = [2 => 'val1', 3 => 'val2', 6 => 'val3'];
         $this->assertEquals($expected, $result);
 
         $result = UArray::filterValues($array, UArray::TYPE_STRING, false);
-        $expected = array('val1', 'val2', 'val3',);
+        $expected = ['val1', 'val2', 'val3'];
         $this->assertEquals($expected, $result);
     }
 
     public function testSearchKey()
     {
-        $array = array(
+        $array = [
             1 => 'value1',
             2 => 'value2',
             '3' => 'value3',
             4 => 'value4',
-        );
+        ];
 
         $result = UArray::searchKey($array, 5);
         $this->assertEquals(false, $result);
@@ -182,11 +182,11 @@ class UArrayTest extends TestCase
 
     public function testInsertBefore()
     {
-        $array = array(
+        $array = [
             'key1' => 'value1',
             'key2' => 'value2',
             'key3' => 'value3',
-        );
+        ];
 
         try {
             UArray::insertBefore($array, 'key5', 'value5');
@@ -196,179 +196,179 @@ class UArrayTest extends TestCase
             $this->assertEquals('Element with key "key5" not found.', $e->getMessage());
         }
 
-        $expected = array(
+        $expected = [
             'key1' => 'value1',
             'key2' => 'value2',
             0 => 'value5',
             'key3' => 'value3',
-        );
+        ];
         $result = UArray::insertBefore($array, 'key3', 'value5');
         $this->assertEquals($expected, $result);
-        $result = UArray::insertBefore($array, 'key3', array('value5'));
+        $result = UArray::insertBefore($array, 'key3', ['value5']);
         $this->assertEquals($expected, $result);
 
-        $expected = array(
+        $expected = [
             'key1' => 'value1',
             'key2' => 'value2',
             'key5' => 'value5',
             'key3' => 'value3',
-        );
+        ];
         $result = UArray::insertBefore($array, 'key3', 'value5', 'key5');
         $this->assertEquals($expected, $result);
-        $result = UArray::insertBefore($array, 'key3', array('value5'), 'key5');
+        $result = UArray::insertBefore($array, 'key3', ['value5'], 'key5');
         $this->assertEquals($expected, $result);
     }
 
     public function testInsertAfter()
     {
-        $array = array(
+        $array = [
             'key1' => 'value1',
             'key2' => 'value2',
             'key3' => 'value3',
-        );
+        ];
 
-        $expected = array(
+        $expected = [
             'key1' => 'value1',
             'key2' => 'value2',
             'key3' => 'value3',
             0 => 'value4',
-        );
+        ];
         $result = UArray::insertAfter($array, 'key4', 'value4');
         $this->assertEquals($expected, $result);
-        $result = UArray::insertAfter($array, 'key4', array('value4'));
+        $result = UArray::insertAfter($array, 'key4', ['value4']);
         $this->assertEquals($expected, $result);
 
-        $expected = array(
+        $expected = [
             'key1' => 'value1',
             'key2' => 'value2',
             'key3' => 'value3',
             'key5' => 'value4',
-        );
+        ];
         $result = UArray::insertAfter($array, 'key4', 'value4', 'key5');
         $this->assertEquals($expected, $result);
-        $result = UArray::insertAfter($array, 'key4', array('value4'), 'key5');
+        $result = UArray::insertAfter($array, 'key4', ['value4'], 'key5');
         $this->assertEquals($expected, $result);
 
-        $expected = array(
+        $expected = [
             'key1' => 'value1',
             0 => 'value4',
             'key2' => 'value2',
             'key3' => 'value3',
-        );
+        ];
         $result = UArray::insertAfter($array, 'key1', 'value4');
         $this->assertEquals($expected, $result);
-        $result = UArray::insertAfter($array, 'key1', array('value4'));
+        $result = UArray::insertAfter($array, 'key1', ['value4']);
         $this->assertEquals($expected, $result);
 
-        $expected = array(
+        $expected = [
             'key1' => 'value1',
             'key5' => 'value4',
             'key2' => 'value2',
             'key3' => 'value3',
-        );
+        ];
         $result = UArray::insertAfter($array, 'key1', 'value4', 'key5');
         $this->assertEquals($expected, $result);
-        $result = UArray::insertAfter($array, 'key1', array('value4'), 'key5');
+        $result = UArray::insertAfter($array, 'key1', ['value4'], 'key5');
         $this->assertEquals($expected, $result);
     }
 
     public function testMergeRecursive()
     {
-        $array1 = array(
+        $array1 = [
             'key1' => 'value1',
-            'key2' => array(
-                'key21' => array(
+            'key2' => [
+                'key21' => [
                     'value21',
                     'value22',
-                ),
+                ],
                 'value221'
-            )
-        );
-        $array2 = array(
+            ]
+        ];
+        $array2 = [
             'key3' => 'value3',
-            'key2' => array(
+            'key2' => [
                 'value222',
                 'value223',
-                'key21' => array(
+                'key21' => [
                     'value23'
-                )
-            ),
+                ]
+            ],
             'value4'
-        );
+        ];
         $result = UArray::mergeRecursive($array1, $array2);
-        $expected = array(
+        $expected = [
             'key1' => 'value1',
-            'key2' => array(
-                'key21' => array(
+            'key2' => [
+                'key21' => [
                     'value21',
                     'value22',
                     'value23',
-                ),
+                ],
                 'value221',
                 'value222',
                 'value223',
-            ),
+            ],
             'key3' => 'value3',
             'value4'
-        );
+        ];
         $this->assertEquals($expected, $result);
     }
 
     public function testFlatten()
     {
-        $array = array(
+        $array = [
             'key1' => 'value1',
-            'key2' => array(
+            'key2' => [
                 'value2',
                 'value3'
-            )
-        );
-        $expected = array(
+            ]
+        ];
+        $expected = [
             'value1',
             'value2',
             'value3'
-        );
+        ];
         $result = UArray::flatten($array);
         $this->assertEquals($expected, $result);
     }
 
     public function testMap()
     {
-        $array = array(
-            array('key1' => 'value11', 'key2' => 'value12'),
-            array('key1' => 'value21', 'key2' => 'value22'),
-            array('key1' => 'value31', 'key2' => 'value32'),
-        );
+        $array = [
+            ['key1' => 'value11', 'key2' => 'value12'],
+            ['key1' => 'value21', 'key2' => 'value22'],
+            ['key1' => 'value31', 'key2' => 'value32'],
+       ];
 
         $result = UArray::map($array, 'key1', 'key3');
-        $expected = array();
+        $expected = [];
         $this->assertEquals($expected, $result);
 
         $result = UArray::map($array, 'key3', 'key2');
-        $expected = array();
+        $expected = [];
         $this->assertEquals($expected, $result);
 
         $result = UArray::map($array, 'key1', 'key2');
-        $expected = array(
+        $expected = [
             'value11' => 'value12',
             'value21' => 'value22',
             'value31' => 'value32'
-        );
+        ];
         $this->assertEquals($expected, $result);
 
         $result = UArray::map($array, 'key2');
-        $expected = array(
-            'value12' => array('key1' => 'value11', 'key2' => 'value12'),
-            'value22' => array('key1' => 'value21', 'key2' => 'value22'),
-            'value32' => array('key1' => 'value31', 'key2' => 'value32'),
-        );
+        $expected = [
+            'value12' => ['key1' => 'value11', 'key2' => 'value12'],
+            'value22' => ['key1' => 'value21', 'key2' => 'value22'],
+            'value32' => ['key1' => 'value31', 'key2' => 'value32'],
+        ];
         $this->assertEquals($expected, $result);
     }
 
     public function testMultisortException()
     {
-        $array = array();
-        $keys = array('key1', 'key2');
+        $array = [];
+        $keys = ['key1', 'key2'];
 
         try {
             UArray::multisort($array, $keys);
@@ -378,8 +378,8 @@ class UArrayTest extends TestCase
             $this->assertEquals('Params $arr or $key is invalid for sorting.', $e->getMessage());
         }
 
-        $array = array(1, 2, 3, 4);
-        $keys = array();
+        $array = [1, 2, 3, 4];
+        $keys = [];
 
         try {
             UArray::multisort($array, $keys);
@@ -389,8 +389,8 @@ class UArrayTest extends TestCase
             $this->assertEquals('Params $arr or $key is invalid for sorting.', $e->getMessage());
         }
 
-        $keys = array('key1', 'key2');
-        $direction = array(SORT_ASC);
+        $keys = ['key1', 'key2'];
+        $direction = [SORT_ASC];
 
         try {
             UArray::multisort($array, $keys, $direction);
@@ -400,8 +400,8 @@ class UArrayTest extends TestCase
             $this->assertEquals('The length of $direction and $keys params must be equal.', $e->getMessage());
         }
 
-        $direction = array(SORT_ASC, SORT_DESC);
-        $sortFlag = array(SORT_REGULAR);
+        $direction = [SORT_ASC, SORT_DESC];
+        $sortFlag = [SORT_REGULAR];
 
         try {
             UArray::multisort($array, $keys, $direction, $sortFlag);
@@ -414,63 +414,63 @@ class UArrayTest extends TestCase
 
     public function testMultisort()
     {
-        $array = array(
-            array("firstname" => "Mary", "lastname" => "Johnson", "age" => 25),
-            array("firstname" => "Amanda", "lastname" => "Miller", "age" => 18),
-            array("firstname" => "James", "lastname" => "Brown", "age" => 31),
-            array("firstname" => "Patricia", "lastname" => "Williams", "age" => 7),
-        );
+        $array = [
+            ["firstname" => "Mary", "lastname" => "Johnson", "age" => 25],
+            ["firstname" => "Amanda", "lastname" => "Miller", "age" => 18],
+            ["firstname" => "James", "lastname" => "Brown", "age" => 31],
+            ["firstname" => "Patricia", "lastname" => "Williams", "age" => 7],
+        ];
 
         $keys = 'firstname';
         UArray::multisort($array, $keys);
 
-        $expected = array(
-            array("firstname" => "Amanda", "lastname" => "Miller", "age" => 18),
-            array("firstname" => "James", "lastname" => "Brown", "age" => 31),
-            array("firstname" => "Mary", "lastname" => "Johnson", "age" => 25),
-            array("firstname" => "Patricia", "lastname" => "Williams", "age" => 7),
-        );
+        $expected = [
+            ["firstname" => "Amanda", "lastname" => "Miller", "age" => 18],
+            ["firstname" => "James", "lastname" => "Brown", "age" => 31],
+            ["firstname" => "Mary", "lastname" => "Johnson", "age" => 25],
+            ["firstname" => "Patricia", "lastname" => "Williams", "age" => 7],
+        ];
         $this->assertEquals($expected, $array);
 
-        $keys = array('firstname', 'age');
-        $direction = array(SORT_DESC, SORT_ASC);
-        $sortFlag = array(SORT_REGULAR, SORT_REGULAR);
+        $keys = ['firstname', 'age'];
+        $direction = [SORT_DESC, SORT_ASC];
+        $sortFlag = [SORT_REGULAR, SORT_REGULAR];
         UArray::multisort($array, $keys, $direction, $sortFlag);
 
-        $expected = array(
-            array("firstname" => "Patricia", "lastname" => "Williams", "age" => 7),
-            array("firstname" => "Mary", "lastname" => "Johnson", "age" => 25),
-            array("firstname" => "James", "lastname" => "Brown", "age" => 31),
-            array("firstname" => "Amanda", "lastname" => "Miller", "age" => 18),
-        );
+        $expected = [
+            ["firstname" => "Patricia", "lastname" => "Williams", "age" => 7],
+            ["firstname" => "Mary", "lastname" => "Johnson", "age" => 25],
+            ["firstname" => "James", "lastname" => "Brown", "age" => 31],
+            ["firstname" => "Amanda", "lastname" => "Miller", "age" => 18],
+        ];
         $this->assertEquals($expected, $array);
     }
 
     public function testFirstKey()
     {
-        $example = array('key1' => 45, 'red', 'flower', 5 => 'flatten', 'key3' => '45');
+        $example = ['key1' => 45, 'red', 'flower', 5 => 'flatten', 'key3' => '45'];
         $result = UArray::firstKey($example);
         $this->assertEquals('key1', $result);
     }
 
     public function testLastKey()
     {
-        $example = array('key1' => 45, 'red', 'flower', 'key3' => '45', 5 => 'flatten');
+        $example = ['key1' => 45, 'red', 'flower', 'key3' => '45', 5 => 'flatten'];
         $result = UArray::lastKey($example);
         $this->assertEquals(5, $result);
     }
 
     public function testIsAssoc()
     {
-        $example = array(45, 'red', 'flower',);
+        $example = [45, 'red', 'flower'];
         $result = UArray::isAssoc($example);
         $this->assertFalse($result);
 
-        $example = array('key1' => 45, 'key3' => '45');
+        $example = ['key1' => 45, 'key3' => '45'];
         $result = UArray::isAssoc($example);
         $this->assertTrue($result);
 
-        $example = array('key1' => 45, 'red', 'flower', 'key3' => '45', 5 => 'flatten',);
+        $example = ['key1' => 45, 'red', 'flower', 'key3' => '45', 5 => 'flatten'];
         $result = UArray::isAssoc($example);
         $this->assertTrue($result);
     }
@@ -478,7 +478,7 @@ class UArrayTest extends TestCase
     public function testLoadTranslations()
     {
         try {
-            static::callMethod('\\Utility\\UString', 'loadTranslations', array('someMethod'));
+            static::callMethod('\\Utility\\UString', 'loadTranslations', ['someMethod']);
             $this->fail('Expected exception not thrown');
         } catch(InvalidArgumentException $e){
             $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);

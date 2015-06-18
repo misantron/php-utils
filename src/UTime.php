@@ -159,6 +159,6 @@ class UTime extends UAbstract
             throw new InvalidArgumentException('$to argument format is invalid.');
         }
 
-        return array($firstDateObj, $secondDateObj);
+        return [$firstDateObj, $secondDateObj];
     }
 }
