@@ -2,7 +2,6 @@
 
 namespace Utility;
 
-use Utility\Exception\InvalidArgumentException;
 use Utility\Exception\NonStaticCallException;
 use Utility\Translation\UAbstractTranslation;
 
@@ -32,7 +31,7 @@ class UAbstract
      *
      * @return array
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      *
      * @codeCoverageIgnore
      */
@@ -44,7 +43,7 @@ class UAbstract
         $className = str_replace('Utility', 'Utility\\Translation', get_called_class()) . 'Translation';
         $dictionary = $className::load($method);
         if ($dictionary === null) {
-            throw new InvalidArgumentException('Can not load translation for method.');
+            throw new \InvalidArgumentException('Can not load translation for method.');
         }
         return $dictionary;
     }

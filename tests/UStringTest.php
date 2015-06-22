@@ -3,7 +3,6 @@
 namespace Utility\Tests;
 
 use Utility\Exception\NonStaticCallException;
-use Utility\Exception\InvalidArgumentException;
 use Utility\UString;
 
 /**
@@ -78,8 +77,8 @@ class UStringTest extends TestCase
         try {
             UString::plural(12, ['страница', 'страниц']);
             $this->fail('Expected exception not thrown');
-        } catch(InvalidArgumentException $e){
-            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
+        } catch(\InvalidArgumentException $e){
+            $this->assertInstanceOf('\\InvalidArgumentException', $e);
             $this->assertEquals('Param $forms must contains three words.', $e->getMessage());
         }
 
@@ -236,8 +235,8 @@ class UStringTest extends TestCase
         try {
             static::callMethod('\\Utility\\UString', 'loadTranslations', ['fileSize1']);
             $this->fail('Expected exception not thrown');
-        } catch(InvalidArgumentException $e){
-            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
+        } catch(\InvalidArgumentException $e){
+            $this->assertInstanceOf('\\InvalidArgumentException', $e);
             $this->assertEquals('Can not load translation for method.', $e->getMessage());
         }
 

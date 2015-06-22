@@ -2,8 +2,6 @@
 
 namespace Utility\Tests;
 
-use Utility\Exception\InvalidArgumentException;
-use Utility\Exception\OutOfRangeException;
 use Utility\Exception\NonStaticCallException;
 use Utility\UTime;
 
@@ -31,8 +29,8 @@ class UTimeTest extends TestCase
         try {
             UTime::timeDiff('2015-03-04', '2015-02-01');
             $this->fail('Expected exception not thrown');
-        } catch(InvalidArgumentException $e){
-            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
+        } catch(\InvalidArgumentException $e){
+            $this->assertInstanceOf('\\InvalidArgumentException', $e);
         }
 
         $result = UTime::timeDiff(1424380190, 1424380947);
@@ -77,8 +75,8 @@ class UTimeTest extends TestCase
         try {
             UTime::secondsDiff('2014-11-13', '2015-02-15');
             $this->fail('Expected exception not thrown');
-        } catch(OutOfRangeException $e){
-            $this->assertInstanceOf('\\Utility\\Exception\\OutOfRangeException', $e);
+        } catch(\OutOfRangeException $e){
+            $this->assertInstanceOf('\\OutOfRangeException', $e);
         }
 
         $result = UTime::secondsDiff(new \DateTime('2015-02-26 22:16:21'), new \DateTime('2015-02-26 22:16:37'));
@@ -107,8 +105,8 @@ class UTimeTest extends TestCase
         try {
             static::callMethod('\\Utility\\UString', 'loadTranslations', ['timeDiffSomething']);
             $this->fail('Expected exception not thrown');
-        } catch(InvalidArgumentException $e){
-            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
+        } catch(\InvalidArgumentException $e){
+            $this->assertInstanceOf('\\InvalidArgumentException', $e);
             $this->assertEquals('Can not load translation for method.', $e->getMessage());
         }
 
@@ -116,52 +114,5 @@ class UTimeTest extends TestCase
         $this->assertNotNull($result);
         $this->assertInternalType('array', $result);
         $this->assertNotEmpty($result);
-    }
-
-    public function testPrepareArgs()
-    {
-        try {
-            static::callMethod('\\Utility\\UTime', 'prepareArgs', [true, '2015-02-01']);
-            $this->fail('Expected exception not thrown');
-        } catch(InvalidArgumentException $e){
-            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
-        }
-
-        try {
-            static::callMethod('\\Utility\\UTime', 'prepareArgs', [true, false]);
-            $this->fail('Expected exception not thrown');
-        } catch(InvalidArgumentException $e){
-            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
-        }
-
-        try {
-            static::callMethod('\\Utility\\UTime', 'prepareArgs', [1424380190, false]);
-            $this->fail('Expected exception not thrown');
-        } catch(InvalidArgumentException $e){
-            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
-        }
-
-        $result = static::callMethod('\\Utility\\UTime', 'prepareArgs', ['2015-02-13', '2015-02-26']);
-        $expected = [new \DateTime('2015-02-13'), new \DateTime('2015-02-26')];
-        $this->assertEquals($expected, $result);
-
-        $result = static::callMethod('\\Utility\\UTime', 'prepareArgs', [1424380190, 1424808432]);
-        $date1 = new \DateTime();
-        $date1->setTimestamp(1424380190);
-        $date2 = new \DateTime();
-        $date2->setTimestamp(1424808432);
-        $expected = [$date1, $date2];
-        $this->assertEquals($expected, $result);
-
-        $result = static::callMethod('\\Utility\\UTime', 'prepareArgs', ['2014-11-13', 1424380190]);
-        $date1 = new \DateTime('2014-11-13');
-        $date2 = new \DateTime();
-        $date2->setTimestamp(1424380190);
-        $expected = [$date1, $date2];
-        $this->assertEquals($expected, $result);
-
-        $result = static::callMethod('\\Utility\\UTime', 'prepareArgs', [new \DateTime('2015-02-26 13:05'), new \DateTime('2015-02-26 22:16')]);
-        $expected = [new \DateTime('2015-02-26 13:05'), new \DateTime('2015-02-26 22:16')];
-        $this->assertEquals($expected, $result);
     }
 }

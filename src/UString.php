@@ -4,8 +4,6 @@ namespace Utility;
 
 use Cocur\Slugify\Slugify;
 use Utility\Exception\ExtensionNotLoadedException;
-use Utility\Exception\InvalidArgumentException;
-use Utility\Exception\RuntimeException;
 
 /**
  * Class UString
@@ -83,12 +81,12 @@ class UString extends UAbstract
      *
      * @return string
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public static function plural($number, $forms, $withNumber = false)
     {
         if (sizeof($forms) < 3) {
-            throw new InvalidArgumentException('Param $forms must contains three words.');
+            throw new \InvalidArgumentException('Param $forms must contains three words.');
         }
         $text = $number % 10 == 1 && $number % 100 != 11 ? $forms[0] : ($number % 10 >= 2 && $number % 10 <= 4 && ($number % 100 < 10 || $number % 100 >= 20) ? $forms[1] : $forms[2]);
         return $withNumber ? $number . ' ' . $text : $text;
@@ -126,7 +124,7 @@ class UString extends UAbstract
      * @return string
      *
      * @throws ExtensionNotLoadedException
-     * @throws RuntimeException
+     * @throws \RuntimeException
      */
     public static function secureRandom($length = 16)
     {
@@ -139,7 +137,7 @@ class UString extends UAbstract
         $bytes = openssl_random_pseudo_bytes($length, $cryptStrong);
         // @codeCoverageIgnoreStart
         if (static::byteLength($bytes) < $length || !$cryptStrong) {
-            throw new RuntimeException('Unable to generate random bytes.');
+            throw new \RuntimeException('Unable to generate random bytes.');
         }
         $bytes = static::byteSubstr($bytes, 0, $length);
         // @codeCoverageIgnoreEnd

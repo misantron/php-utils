@@ -2,7 +2,6 @@
 
 namespace Utility\Tests;
 
-use Utility\Exception\InvalidArgumentException;
 use Utility\Exception\NonStaticCallException;
 use Utility\UArray;
 
@@ -30,8 +29,8 @@ class UArrayTest extends TestCase
         try {
             UArray::get($array, 'key');
             $this->fail('Expected exception not thrown');
-        } catch(InvalidArgumentException $e){
-            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
+        } catch(\InvalidArgumentException $e){
+            $this->assertInstanceOf('\\InvalidArgumentException', $e);
             $this->assertEquals('Element with key "key" not found.', $e->getMessage());
         }
 
@@ -191,8 +190,8 @@ class UArrayTest extends TestCase
         try {
             UArray::insertBefore($array, 'key5', 'value5');
             $this->fail('Expected exception not thrown');
-        } catch(InvalidArgumentException $e){
-            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
+        } catch(\InvalidArgumentException $e){
+            $this->assertInstanceOf('\\InvalidArgumentException', $e);
             $this->assertEquals('Element with key "key5" not found.', $e->getMessage());
         }
 
@@ -365,16 +364,16 @@ class UArrayTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testMultisortException()
+    public function testPrepareArguments()
     {
         $array = [];
         $keys = ['key1', 'key2'];
 
         try {
-            UArray::multisort($array, $keys);
+            static::callMethod('\\Utility\\UArray', 'prepareArguments', [&$array, &$keys]);
             $this->fail('Expected exception not thrown');
-        } catch(InvalidArgumentException $e){
-            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
+        } catch(\InvalidArgumentException $e){
+            $this->assertInstanceOf('\\InvalidArgumentException', $e);
             $this->assertEquals('Params $arr or $key is invalid for sorting.', $e->getMessage());
         }
 
@@ -382,10 +381,10 @@ class UArrayTest extends TestCase
         $keys = [];
 
         try {
-            UArray::multisort($array, $keys);
+            static::callMethod('\\Utility\\UArray', 'prepareArguments', [&$array, &$keys]);
             $this->fail('Expected exception not thrown');
-        } catch(InvalidArgumentException $e){
-            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
+        } catch(\InvalidArgumentException $e){
+            $this->assertInstanceOf('\\InvalidArgumentException', $e);
             $this->assertEquals('Params $arr or $key is invalid for sorting.', $e->getMessage());
         }
 
@@ -393,10 +392,10 @@ class UArrayTest extends TestCase
         $direction = [SORT_ASC];
 
         try {
-            UArray::multisort($array, $keys, $direction);
+            static::callMethod('\\Utility\\UArray', 'prepareArguments', [&$array, &$keys, &$direction]);
             $this->fail('Expected exception not thrown');
-        } catch(InvalidArgumentException $e){
-            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
+        } catch(\InvalidArgumentException $e){
+            $this->assertInstanceOf('\\InvalidArgumentException', $e);
             $this->assertEquals('The length of $direction and $keys params must be equal.', $e->getMessage());
         }
 
@@ -404,15 +403,15 @@ class UArrayTest extends TestCase
         $sortFlag = [SORT_REGULAR];
 
         try {
-            UArray::multisort($array, $keys, $direction, $sortFlag);
+            static::callMethod('\\Utility\\UArray', 'prepareArguments', [&$array, &$keys, &$direction, &$sortFlag]);
             $this->fail('Expected exception not thrown');
-        } catch(InvalidArgumentException $e){
-            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
+        } catch(\InvalidArgumentException $e){
+            $this->assertInstanceOf('\\InvalidArgumentException', $e);
             $this->assertEquals('The length of $sortFlag and $keys params must be equal.', $e->getMessage());
         }
     }
 
-    public function testMultisort()
+    public function testMultiSort()
     {
         $array = [
             ["firstname" => "Mary", "lastname" => "Johnson", "age" => 25],
@@ -422,7 +421,7 @@ class UArrayTest extends TestCase
         ];
 
         $keys = 'firstname';
-        UArray::multisort($array, $keys);
+        UArray::multiSort($array, $keys);
 
         $expected = [
             ["firstname" => "Amanda", "lastname" => "Miller", "age" => 18],
@@ -435,7 +434,7 @@ class UArrayTest extends TestCase
         $keys = ['firstname', 'age'];
         $direction = [SORT_DESC, SORT_ASC];
         $sortFlag = [SORT_REGULAR, SORT_REGULAR];
-        UArray::multisort($array, $keys, $direction, $sortFlag);
+        UArray::multiSort($array, $keys, $direction, $sortFlag);
 
         $expected = [
             ["firstname" => "Patricia", "lastname" => "Williams", "age" => 7],
@@ -480,8 +479,8 @@ class UArrayTest extends TestCase
         try {
             static::callMethod('\\Utility\\UString', 'loadTranslations', ['someMethod']);
             $this->fail('Expected exception not thrown');
-        } catch(InvalidArgumentException $e){
-            $this->assertInstanceOf('\\Utility\\Exception\\InvalidArgumentException', $e);
+        } catch(\InvalidArgumentException $e){
+            $this->assertInstanceOf('\\InvalidArgumentException', $e);
             $this->assertEquals('Can not load translation for method.', $e->getMessage());
         }
     }

@@ -2,9 +2,7 @@
 
 namespace Utility;
 
-use Utility\Exception\InvalidArgumentException;
-use Utility\Exception\OutOfRangeException;
-use Utility\Exception\RuntimeException;
+use Utility\Object\DateRange;
 
 /**
  * Class UTime
@@ -20,34 +18,36 @@ class UTime extends UAbstract
     /**
      * Get time diff in human-readable format.
      *
-     * @param mixed $from
-     * @param mixed $to
+     * @param mixed $periodStartDate
+     * @param mixed $periodEndDate
      *
      * @return string
      *
-     * @throws InvalidArgumentException
-     * @throws RuntimeException
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
-    public static function timeDiff($from, $to)
+    public static function timeDiff($periodStartDate, $periodEndDate)
     {
         /**
          * @var \DateTime $fromDate
          * @var \DateTime $toDate
          */
         // @codeCoverageIgnoreStart
-        list($fromDate, $toDate) = static::prepareArgs($from, $to);
+        $dateRange = new DateRange($periodStartDate, $periodEndDate);
+        $fromDate = $dateRange->getRangeBegin();
+        $toDate = $dateRange->getRangeEnd();
         // @codeCoverageIgnoreEnd
 
         $diff = $fromDate->diff($toDate);
         // @codeCoverageIgnoreStart
         if ($diff === false) {
-            throw new RuntimeException('Unexpected runtime error.');
+            throw new \RuntimeException('Unexpected runtime error.');
         }
         // @codeCoverageIgnoreEnd
 
         if ($diff->invert === 1) {
-            throw new InvalidArgumentException(
-                '$from argument can not be greater than $to argument.'
+            throw new \InvalidArgumentException(
+                '$periodStartDate argument can not be greater than $periodEndDate argument.'
             );
         }
 
@@ -82,9 +82,9 @@ class UTime extends UAbstract
      *
      * @return int
      *
-     * @throws InvalidArgumentException
-     * @throws OutOfRangeException
-     * @throws RuntimeException
+     * @throws \InvalidArgumentException
+     * @throws \OutOfRangeException
+     * @throws \RuntimeException
      */
     public static function secondsDiff($periodStartDate, $periodEndDate)
     {
@@ -93,18 +93,20 @@ class UTime extends UAbstract
          * @var \DateTime $toDate
          */
         // @codeCoverageIgnoreStart
-        list($fromDate, $toDate) = static::prepareArgs($periodStartDate, $periodEndDate);
+        $dateRange = new DateRange($periodStartDate, $periodEndDate);
+        $fromDate = $dateRange->getRangeBegin();
+        $toDate = $dateRange->getRangeEnd();
         // @codeCoverageIgnoreEnd
 
         $diff = $fromDate->diff($toDate);
         // @codeCoverageIgnoreStart
         if ($diff === false) {
-            throw new RuntimeException('Unexpected runtime error.');
+            throw new \RuntimeException('Unexpected runtime error.');
         }
         // @codeCoverageIgnoreEnd
 
         if ($diff->y > 0 || $diff->m > 0) {
-            throw new OutOfRangeException('Date diff may not exceed one month.');
+            throw new \OutOfRangeException('Date diff may not exceed one month.');
         }
 
         $seconds = 0;
@@ -123,42 +125,5 @@ class UTime extends UAbstract
         }
 
         return $diff->invert === 0 ? $seconds : -$seconds;
-    }
-
-    /**
-     * Convert date-like arguments to DateTime objects.
-     *
-     * @param mixed $firstArg
-     * @param mixed $secondArg
-     *
-     * @return array
-     *
-     * @throws InvalidArgumentException
-     */
-    private static function prepareArgs($firstArg, $secondArg)
-    {
-        if (is_int($firstArg)) {
-            $firstDateObj = new \DateTime();
-            $firstDateObj->setTimestamp($firstArg);
-        } elseif (is_string($firstArg)) {
-            $firstDateObj = new \DateTime($firstArg);
-        } elseif ($firstArg instanceof \DateTime) {
-            $firstDateObj = $firstArg;
-        } else {
-            throw new InvalidArgumentException('$from argument format is invalid.');
-        }
-
-        if (is_int($secondArg)) {
-            $secondDateObj = new \DateTime();
-            $secondDateObj->setTimestamp($secondArg);
-        } elseif (is_string($secondArg)) {
-            $secondDateObj = new \DateTime($secondArg);
-        } elseif ($secondArg instanceof \DateTime) {
-            $secondDateObj = $secondArg;
-        } else {
-            throw new InvalidArgumentException('$to argument format is invalid.');
-        }
-
-        return [$firstDateObj, $secondDateObj];
     }
 }

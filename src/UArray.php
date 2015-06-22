@@ -2,8 +2,6 @@
 
 namespace Utility;
 
-use Utility\Exception\InvalidArgumentException;
-
 /**
  * Class UArray
  *
@@ -29,7 +27,7 @@ class UArray extends UAbstract
      *
      * @return mixed
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public static function get(&$arr, $key, $default = null)
     {
@@ -38,7 +36,7 @@ class UArray extends UAbstract
             $value = $arr[$key];
         } else {
             if (func_num_args() < 3) {
-                throw new InvalidArgumentException('Element with key "' . $key . '" not found.');
+                throw new \InvalidArgumentException('Element with key "' . $key . '" not found.');
             }
             $value = $default;
         }
@@ -159,7 +157,7 @@ class UArray extends UAbstract
      *
      * @return array
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public static function insertBefore(&$arr, $needleKey, $element, $withKey = null)
     {
@@ -170,7 +168,7 @@ class UArray extends UAbstract
         }
         $offset = static::searchKey($arr, $needleKey);
         if ($offset === false) {
-            throw new InvalidArgumentException('Element with key "' . $needleKey . '" not found.');
+            throw new \InvalidArgumentException('Element with key "' . $needleKey . '" not found.');
         }
         return array_merge(
             array_slice($arr, 0, $offset, true),
@@ -210,26 +208,24 @@ class UArray extends UAbstract
      * Merge several arrays recursive.
      * Basically use for two arrays.
      *
-     * @param array $arr1
-     * @param array $arr2
+     * @param array $firstArr
+     * @param array $secondArr
      *
      * @return array
      */
-    public static function mergeRecursive($arr1, $arr2)
+    public static function mergeRecursive($firstArr, $secondArr)
     {
         $args = func_get_args();
         $result = array_shift($args);
-        while (!empty($args)) {
+        while (sizeof($args) > 0) {
             $next = array_shift($args);
             foreach ($next as $k => $v) {
-                if (is_integer($k)) {
-                    if (isset($result[$k])) {
+                if (isset($result[$k])) {
+                    if (is_integer($k)) {
                         $result[] = $v;
-                    } else {
-                        $result[$k] = $v;
+                    } elseif (is_array($v) && is_array($result[$k])) {
+                        $result[$k] = static::mergeRecursive($result[$k], $v);
                     }
-                } elseif (is_array($v) && isset($result[$k]) && is_array($result[$k])) {
-                    $result[$k] = static::mergeRecursive($result[$k], $v);
                 } else {
                     $result[$k] = $v;
                 }
@@ -283,25 +279,13 @@ class UArray extends UAbstract
      * @param int|array    $direction
      * @param int|array    $sortFlag
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
-    public static function multisort(&$arr, $key, $direction = SORT_ASC, $sortFlag = SORT_REGULAR)
+    public static function multiSort(&$arr, $key, $direction = SORT_ASC, $sortFlag = SORT_REGULAR)
     {
-        $keys = is_array($key) ? $key : [$key];
-        if (empty($keys) || empty($arr)) {
-            throw new InvalidArgumentException('Params $arr or $key is invalid for sorting.');
-        }
-        $keysCount = sizeof($keys);
-        if (is_scalar($direction)) {
-            $direction = array_fill(0, $keysCount, $direction);
-        } elseif (sizeof($direction) !== $keysCount) {
-            throw new InvalidArgumentException('The length of $direction and $keys params must be equal.');
-        }
-        if (is_scalar($sortFlag)) {
-            $sortFlag = array_fill(0, $keysCount, $sortFlag);
-        } elseif (sizeof($sortFlag) !== $keysCount) {
-            throw new InvalidArgumentException('The length of $sortFlag and $keys params must be equal.');
-        }
+        // @codeCoverageIgnoreStart
+        $keys = static::prepareArguments($arr, $key, $direction, $sortFlag);
+        // @codeCoverageIgnoreEnd
         $args = [];
         foreach ($keys as $i => $key) {
             $args[] = static::extractColumn($arr, $key);
@@ -310,6 +294,36 @@ class UArray extends UAbstract
         }
         $args[] = &$arr;
         call_user_func_array('array_multisort', $args);
+    }
+
+    /**
+     * @param array        $arr
+     * @param string|array $key
+     * @param int|array    $direction
+     * @param int|array    $sortFlag
+     *
+     * @return array
+     *
+     * @throws \InvalidArgumentException
+     */
+    private static function prepareArguments(&$arr, &$key, &$direction = SORT_ASC, &$sortFlag = SORT_REGULAR)
+    {
+        $keys = is_array($key) ? $key : [$key];
+        $keysCount = sizeof($keys);
+        if ($keysCount < 1 || empty($arr)) {
+            throw new \InvalidArgumentException('Params $arr or $key is invalid for sorting.');
+        }
+        if (is_scalar($direction)) {
+            $direction = array_fill(0, $keysCount, $direction);
+        } elseif (sizeof($direction) !== $keysCount) {
+            throw new \InvalidArgumentException('The length of $direction and $keys params must be equal.');
+        }
+        if (is_scalar($sortFlag)) {
+            $sortFlag = array_fill(0, $keysCount, $sortFlag);
+        } elseif (sizeof($sortFlag) !== $keysCount) {
+            throw new \InvalidArgumentException('The length of $sortFlag and $keys params must be equal.');
+        }
+        return $keys;
     }
 
     /**
