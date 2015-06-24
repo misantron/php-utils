@@ -3,8 +3,7 @@
 [![Build Status](http://img.shields.io/travis/misantron/php-utils.svg?style=flat-square)](https://travis-ci.org/misantron/php-utils)
 [![Code Coverage](http://img.shields.io/coveralls/misantron/php-utils.svg?style=flat-square)](https://coveralls.io/r/misantron/php-utils)
 [![Code Climate](http://img.shields.io/codeclimate/github/misantron/php-utils.svg?style=flat-square)](https://codeclimate.com/github/misantron/php-utils)
-[![Latest Stable Release](http://img.shields.io/github/release/misantron/php-utils.svg?style=flat-square)](https://github.com/misantron/php-utils)
-[![License](http://img.shields.io/packagist/l/misantron/php-utils.svg?style=flat-square)](https://packagist.org/packages/misantron/php-utils)
+[![Latest Release](http://img.shields.io/packagist/v/misantron/php-utils.svg?style=flat-square)](https://packagist.org/packages/misantron/php-utils)
 
 ## Features
 
