@@ -5,26 +5,25 @@ namespace Utility\Object;
 use Utility\Exception\NonStaticCallException;
 
 /**
- * Class Dictionary
+ * Class AbstractDictionary
  *
  * @category Object
  * @package  Utility\Object
  * @author   Alexandr Ivanov <misantron@gmail.com>
  * @license  https://github.com/misantron/php-utils/blob/master/LICENSE (MIT License)
- * @link     https://github.com/misantron/php-utils/blob/master/src/UTime.php
+ * @link     https://github.com/misantron/php-utils/blob/master/src/Object/Dictionary.php
  */
-abstract class Dictionary
+abstract class AbstractDictionary
 {
     /** @var array */
     protected static $titleMapping = [];
-
-    /** @var array|null */
-    protected static $cache;
+    /** @var array */
+    protected static $cache = [];
 
     /**
      * @throws NonStaticCallException
      */
-    function __construct()
+    public function __construct()
     {
         throw new NonStaticCallException('Non static call is disabled.');
     }
@@ -34,23 +33,24 @@ abstract class Dictionary
      */
     final public static function getKeys()
     {
-        if(static::$cache === null){
-            $class = new \ReflectionClass(get_called_class());
-            static::$cache = array_values($class->getConstants());
+        $class = new \ReflectionClass(get_called_class());
+        $hash = crc32($class);
+        if (!isset(static::$cache[$hash])) {
+            static::$cache[$hash] = array_values($class->getConstants());
         }
-        return static::$cache;
+        return static::$cache[$hash];
     }
 
     /**
      * @return array
      */
-    final public static function getTitles()
+    public static function getTitles()
     {
         return static::$titleMapping;
     }
 
     /**
-     * @param string|int $key
+     * @param int $key
      * @return string
      */
     public static function getTitle($key)

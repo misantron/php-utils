@@ -12,7 +12,7 @@ use Utility\Exception\ExtensionNotLoadedException;
  * @package  Utility
  * @author   Alexandr Ivanov <misantron@gmail.com>
  * @license  https://github.com/misantron/php-utils/blob/master/LICENSE (MIT License)
- * @link     https://github.com/misantron/php-utils/blob/master/src/UTime.php
+ * @link     https://github.com/misantron/php-utils/blob/master/src/UString.php
  */
 class UString extends UAbstract
 {

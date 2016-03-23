@@ -9,20 +9,20 @@ namespace Utility\Object;
  * @package  Utility\Object
  * @author   Alexandr Ivanov <misantron@gmail.com>
  * @license  MIT https://github.com/misantron/php-utils/blob/master/LICENSE
- * @link     https://github.com/misantron/php-utils/blob/master/src/UTime.php
+ * @link     https://github.com/misantron/php-utils/blob/master/src/Object/DateRange.php
  */
 class DateRange implements DateRangeInterface
 {
     /** @var \DateTime */
-    private $rangeBegin;
+    protected $rangeBegin;
     /** @var \DateTime */
-    private $rangeEnd;
+    protected $rangeEnd;
 
     /**
      * @param mixed $dateBegin
      * @param mixed $dateEnd
      */
-    function __construct($dateBegin, $dateEnd)
+    public function __construct($dateBegin, $dateEnd)
     {
         if (is_int($dateBegin)) {
             $this->rangeBegin = (new \DateTime())->setTimestamp($dateBegin);

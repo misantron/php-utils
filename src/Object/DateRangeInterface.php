@@ -9,7 +9,7 @@ namespace Utility\Object;
  * @package  Utility\Object
  * @author   Alexandr Ivanov <misantron@gmail.com>
  * @license  MIT https://github.com/misantron/php-utils/blob/master/LICENSE
- * @link     https://github.com/misantron/php-utils/blob/master/src/UTime.php
+ * @link     https://github.com/misantron/php-utils/blob/master/src/Object/DateRangeInterface.php
  */
 interface DateRangeInterface
 {

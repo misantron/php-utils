@@ -12,14 +12,14 @@ use Utility\Translation\UAbstractTranslation;
  * @package  Utility
  * @author   Alexandr Ivanov <misantron@gmail.com>
  * @license  https://github.com/misantron/php-utils/blob/master/LICENSE (MIT License)
- * @link     https://github.com/misantron/php-utils/blob/master/src/UTime.php
+ * @link     https://github.com/misantron/php-utils/blob/master/src/UAbstract.php
  */
 class UAbstract
 {
     /**
      * @throws NonStaticCallException
      */
-    function __construct()
+    public function __construct()
     {
         throw new NonStaticCallException('Non static call is disabled.');
     }

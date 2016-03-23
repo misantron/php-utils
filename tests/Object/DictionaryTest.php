@@ -4,6 +4,7 @@ namespace Utility\Tests\Object;
 
 use Utility\Exception\NonStaticCallException;
 use Utility\Tests\Fixture\UserRoleDictionary;
+use Utility\Tests\Fixture\UserStatusDictionary;
 use Utility\Tests\TestCase;
 
 class DictionaryTest extends TestCase
@@ -17,6 +18,15 @@ class DictionaryTest extends TestCase
             $this->assertInstanceOf('\\Utility\\Exception\\NonStaticCallException', $e);
             $this->assertEquals('Non static call is disabled.', $e->getMessage());
         }
+    }
+
+    public function testCache()
+    {
+        $roles = UserRoleDictionary::getKeys();
+        $statuses = UserStatusDictionary::getKeys();
+
+        $this->assertCount(3, $roles);
+        $this->assertCount(4, $statuses);
     }
 
     public function testGetKeys()

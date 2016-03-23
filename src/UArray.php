@@ -9,7 +9,7 @@ namespace Utility;
  * @package  Utility
  * @author   Alexandr Ivanov <misantron@gmail.com>
  * @license  https://github.com/misantron/php-utils/blob/master/LICENSE (MIT License)
- * @link     https://github.com/misantron/php-utils/blob/master/src/UTime.php
+ * @link     https://github.com/misantron/php-utils/blob/master/src/UArray.php
  */
 class UArray extends UAbstract
 {

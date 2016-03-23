@@ -2,9 +2,9 @@
 
 namespace Utility\Tests\Fixture;
 
-use Utility\Object\Dictionary;
+use Utility\Object\AbstractDictionary;
 
-class UserRoleDictionary extends Dictionary
+class UserRoleDictionary extends AbstractDictionary
 {
     const
         ROLE_USER = 1,
