@@ -45,10 +45,6 @@ class DateRange implements DateRangeInterface
         } else {
             throw new \InvalidArgumentException('Range end date format is invalid.');
         }
-
-        if ($this->rangeBegin->format('Y-m-d') === $this->rangeEnd->format('Y-m-d')) {
-            throw new \InvalidArgumentException('Range begin and end dates are equal.');
-        }
     }
 
     /**

@@ -38,14 +38,6 @@ class DateRangeTest extends TestCase
             $this->assertInstanceOf('\\InvalidArgumentException', $e);
             $this->assertEquals('Range begin date format is invalid.', $e->getMessage());
         }
-
-        try {
-            new DateRange('2016-02-01', '2016-02-01');
-            $this->fail('Expected exception not thrown');
-        } catch(\InvalidArgumentException $e) {
-            $this->assertInstanceOf('\\InvalidArgumentException', $e);
-            $this->assertEquals('Range begin and end dates are equal.', $e->getMessage());
-        }
     }
 
     public function testGetRangeBegin()
@@ -87,6 +79,13 @@ class DateRangeTest extends TestCase
         $this->assertEquals('2016-03-11', $actual[0]);
         $this->assertEquals('2016-03-16', $actual[5]);
         $this->assertCount(6, $actual);
+
+        $range = new DateRange('2016-03-12', '2016-03-12');
+        $actual = $range->getRange('d-m-Y');
+
+        $this->assertInternalType('array', $actual);
+        $this->assertEquals('12-03-2016', $actual[0]);
+        $this->assertCount(1, $actual);
     }
 
     public function testToArray()
