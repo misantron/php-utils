@@ -17,6 +17,8 @@ class DateRange implements DateRangeInterface
     protected $rangeBegin;
     /** @var \DateTime */
     protected $rangeEnd;
+    /** @var \DateTime[] */
+    protected $range;
 
     /**
      * @param mixed $dateBegin
@@ -31,7 +33,7 @@ class DateRange implements DateRangeInterface
         } elseif ($dateBegin instanceof \DateTime) {
             $this->rangeBegin = $dateBegin;
         } else {
-            throw new \InvalidArgumentException('$dateBegin argument format is invalid.');
+            throw new \InvalidArgumentException('Range begin date format is invalid.');
         }
 
         if (is_int($dateEnd)) {
@@ -41,7 +43,11 @@ class DateRange implements DateRangeInterface
         } elseif ($dateEnd instanceof \DateTime) {
             $this->rangeEnd = $dateEnd;
         } else {
-            throw new \InvalidArgumentException('$dateEnd argument format is invalid.');
+            throw new \InvalidArgumentException('Range end date format is invalid.');
+        }
+
+        if ($this->rangeBegin->format('Y-m-d') === $this->rangeEnd->format('Y-m-d')) {
+            throw new \InvalidArgumentException('Range begin and end dates are equal.');
         }
     }
 
@@ -59,6 +65,22 @@ class DateRange implements DateRangeInterface
     public function getRangeEnd()
     {
         return $this->rangeEnd;
+    }
+
+    /**
+     * @param string $format
+     * @return array
+     */
+    public function getRange($format = 'Y-m-d')
+    {
+        if ($this->range === null) {
+            $this->range[] = $this->rangeBegin->format($format);
+            $rangeBegin = $this->rangeBegin;
+            while ($rangeBegin < $this->rangeEnd) {
+                $this->range[] = $rangeBegin->add(new \DateInterval('P1D'))->format($format);
+            }
+        }
+        return $this->range;
     }
 
     /**

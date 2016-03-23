@@ -18,25 +18,33 @@ class DateRangeTest extends TestCase
         try {
             new DateRange(true, '2015-02-01');
             $this->fail('Expected exception not thrown');
-        } catch(\InvalidArgumentException $e){
+        } catch(\InvalidArgumentException $e) {
             $this->assertInstanceOf('\\InvalidArgumentException', $e);
-            $this->assertEquals('$dateBegin argument format is invalid.', $e->getMessage());
+            $this->assertEquals('Range begin date format is invalid.', $e->getMessage());
         }
 
         try {
             new DateRange(1424380190, false);
             $this->fail('Expected exception not thrown');
-        } catch(\InvalidArgumentException $e){
+        } catch(\InvalidArgumentException $e) {
             $this->assertInstanceOf('\\InvalidArgumentException', $e);
-            $this->assertEquals('$dateEnd argument format is invalid.', $e->getMessage());
+            $this->assertEquals('Range end date format is invalid.', $e->getMessage());
         }
 
         try {
             new DateRange(false, new \StdClass());
             $this->fail('Expected exception not thrown');
-        } catch(\InvalidArgumentException $e){
+        } catch(\InvalidArgumentException $e) {
             $this->assertInstanceOf('\\InvalidArgumentException', $e);
-            $this->assertEquals('$dateBegin argument format is invalid.', $e->getMessage());
+            $this->assertEquals('Range begin date format is invalid.', $e->getMessage());
+        }
+
+        try {
+            new DateRange('2016-02-01', '2016-02-01');
+            $this->fail('Expected exception not thrown');
+        } catch(\InvalidArgumentException $e) {
+            $this->assertInstanceOf('\\InvalidArgumentException', $e);
+            $this->assertEquals('Range begin and end dates are equal.', $e->getMessage());
         }
     }
 
@@ -68,6 +76,17 @@ class DateRangeTest extends TestCase
         $result = (new DateRange('2014-11-13', new \DateTime('2015-02-26')))->getRangeEnd();
         $expected = new \DateTime('2015-02-26');
         $this->assertEquals($expected, $result);
+    }
+
+    public function testGetRange()
+    {
+        $range = new DateRange('2016-03-11', '2016-03-16');
+        $actual = $range->getRange();
+
+        $this->assertInternalType('array', $actual);
+        $this->assertEquals('2016-03-11', $actual[0]);
+        $this->assertEquals('2016-03-16', $actual[5]);
+        $this->assertCount(6, $actual);
     }
 
     public function testToArray()

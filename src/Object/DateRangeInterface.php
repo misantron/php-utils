@@ -22,4 +22,10 @@ interface DateRangeInterface
      * @return \DateTime
      */
     public function getRangeEnd();
+
+    /**
+     * @param string $format
+     * @return array
+     */
+    public function getRange($format = 'Y-m-d');
 }
