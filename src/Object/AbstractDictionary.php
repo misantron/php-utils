@@ -33,9 +33,10 @@ abstract class AbstractDictionary
      */
     final public static function getKeys()
     {
-        $class = new \ReflectionClass(get_called_class());
-        $hash = crc32($class);
+        $calledClass = get_called_class();
+        $hash = crc32($calledClass);
         if (!isset(static::$cache[$hash])) {
+            $class = new \ReflectionClass($calledClass);
             static::$cache[$hash] = array_values($class->getConstants());
         }
         return static::$cache[$hash];
