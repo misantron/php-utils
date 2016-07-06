@@ -25,7 +25,12 @@ interface DateRangeInterface
 
     /**
      * @param string $format
-     * @return array
+     * @return \DateTime[]
      */
     public function getRange($format = 'Y-m-d');
+
+    /**
+     * @return \DateTime[]
+     */
+    public function toArray();
 }

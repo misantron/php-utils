@@ -5,8 +5,6 @@ namespace Utility\Tests;
 use Utility\Exception\NonStaticCallException;
 use Utility\UTime;
 
-date_default_timezone_set('UTC');
-
 /**
  * Class UTimeTest
  * @package Utility\Tests

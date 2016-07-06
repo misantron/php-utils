@@ -2,6 +2,8 @@
 
 namespace Utility\Tests;
 
+date_default_timezone_set('UTC');
+
 /**
  * Class TestCase
  * @package Utility\Tests

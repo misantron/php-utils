@@ -5,39 +5,36 @@ namespace Utility\Tests\Object;
 use Utility\Object\DateRange;
 use Utility\Tests\TestCase;
 
-date_default_timezone_set('UTC');
-
 /**
  * Class DateRangeTest
  * @package Utility\Tests\Object
  */
 class DateRangeTest extends TestCase
 {
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Date format is invalid.
+     */
+    public function testConstructorWithInvalidRangeBegin()
+    {
+        new DateRange(true, '2015-02-01');
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Date format is invalid.
+     */
+    public function testConstructorWithInvalidRangeEnd()
+    {
+        new DateRange(1424380190, false);
+    }
+
     public function testConstructor()
     {
-        try {
-            new DateRange(true, '2015-02-01');
-            $this->fail('Expected exception not thrown');
-        } catch(\InvalidArgumentException $e) {
-            $this->assertInstanceOf('\\InvalidArgumentException', $e);
-            $this->assertEquals('Range begin date format is invalid.', $e->getMessage());
-        }
+        $dateRange = new DateRange('2016-03-12', '2016-03-15');
 
-        try {
-            new DateRange(1424380190, false);
-            $this->fail('Expected exception not thrown');
-        } catch(\InvalidArgumentException $e) {
-            $this->assertInstanceOf('\\InvalidArgumentException', $e);
-            $this->assertEquals('Range end date format is invalid.', $e->getMessage());
-        }
-
-        try {
-            new DateRange(false, new \StdClass());
-            $this->fail('Expected exception not thrown');
-        } catch(\InvalidArgumentException $e) {
-            $this->assertInstanceOf('\\InvalidArgumentException', $e);
-            $this->assertEquals('Range begin date format is invalid.', $e->getMessage());
-        }
+        $this->assertAttributeEquals(new \DateTime('2016-03-12'), 'rangeBegin', $dateRange);
+        $this->assertAttributeEquals(new \DateTime('2016-03-15'), 'rangeEnd', $dateRange);
     }
 
     public function testGetRangeBegin()
@@ -86,6 +83,18 @@ class DateRangeTest extends TestCase
         $this->assertInternalType('array', $actual);
         $this->assertEquals('12-03-2016', $actual[0]);
         $this->assertCount(1, $actual);
+    }
+
+    public function testGetRangeWithGreaterBegin()
+    {
+        $range = new DateRange('2016-03-13', '2016-03-11');
+        $actual = $range->getRange();
+
+        $this->assertInternalType('array', $actual);
+        $this->assertEquals('2016-03-13', $actual[0]);
+        $this->assertEquals('2016-03-12', $actual[1]);
+        $this->assertEquals('2016-03-11', $actual[2]);
+        $this->assertCount(3, $actual);
     }
 
     public function testToArray()
